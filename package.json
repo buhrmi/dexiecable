@@ -7,9 +7,10 @@
     "src"
   ],
   "license": "MIT",
+  "author": "Stefan Buhrmester <stefan@buhrmi.de>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/keoscout/dexiecable"
+    "url": "https://github.com/buhrmi/dexiecable"
   },
   "peerDependencies": {
     "@rails/actioncable": ">= 7.0",

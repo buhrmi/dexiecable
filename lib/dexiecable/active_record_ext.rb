@@ -1,53 +1,60 @@
 # frozen_string_literal: true
 
 module DexieCable
-  class ActiveRecordExt
-    # Declares that this model syncs changes to Dexie (IndexedDB) via a
-    # DexieCable channel.
-    #
-    #   class Message < ApplicationRecord
-    #     syncs_to_dexie via: -> { UserChannel[sender] }
-    #     syncs_to_dexie via: -> { UserChannel[receiver] }
-    #     syncs_to_dexie via: PublicChannel
-    #   end
-    #
-    # @param via    [Proc, DexieCable] Proc evaluated in record context,
-    #                 must return a channel (responds to +table+). A channel
-    #                 class/instance can also be passed directly. Skipped if nil.
-    # @param table  [String, Symbol] Override the Dexie table name
-    #                (defaults to the model's table_name).
-    # @param only   [Array<Symbol>] Limit which lifecycle events sync.
-    #                Default: [:create, :update, :destroy].
-    def self.syncs_to_dexie(via:, table: nil, only: nil)
-      table_name = (table || self.table_name).to_s
-      events     = Array(only || %i[create update destroy])
+  module ActiveRecordExt
+    extend ActiveSupport::Concern
 
-      @dexie_sync_configs ||= []
-      @dexie_sync_configs << { via: via, table: table_name, only: events }
+    class_methods do
+      # Declares that this model syncs changes to Dexie (IndexedDB) via a
+      # DexieCable channel.
+      #
+      #   class Message < ApplicationRecord
+      #     syncs_to_dexie via: -> { UserChannel[sender] }
+      #     syncs_to_dexie via: -> { UserChannel[receiver] }
+      #     syncs_to_dexie via: PublicChannel
+      #   end
+      #
+      # @param via    [Proc, DexieCable] Proc evaluated in record context,
+      #                 must return a channel (responds to +table+). A channel
+      #                 class/instance can also be passed directly. Skipped if nil.
+      # @param table  [String, Symbol] Override the Dexie table name
+      #                (defaults to the model's table_name).
+      # @param only   [Array<Symbol>] Limit which lifecycle events sync.
+      #                Default: [:create, :update, :destroy].
+      def syncs_to_dexie(via:, table: nil, only: nil)
+        table_name = (table || self.table_name).to_s
+        events     = Array(only || %i[create update destroy])
 
-      if events.include?(:destroy)
-        before_destroy :dexie_sync_before_destroy
+        @dexie_sync_configs ||= []
+        @dexie_sync_configs << { via: via, table: table_name, only: events }
 
-        after_commit on: :destroy do
-          channel = resolve_channel(via)
-          next unless channel
-          channel.table(table_name).delete(dexie_destroy_id)
+        if events.include?(:destroy)
+          before_destroy :dexie_sync_before_destroy
+
+          after_commit on: :destroy do
+            channel = resolve_channel(via)
+            next unless channel
+            channel.table(table_name).delete(dexie_destroy_id)
+          end
         end
-      end
 
-      if events.include?(:create)
-        after_commit on: :create do
-          channel = resolve_channel(via)
-          next unless channel
-          channel.table(table_name).add(as_json_for_dexie)
+        if events.include?(:create)
+          after_commit on: :create do
+            channel = resolve_channel(via)
+            next unless channel
+            channel.table(table_name).add(as_json_for_dexie)
+          end
         end
-      end
 
-      if events.include?(:update)
-        after_commit on: :update do
-          channel = resolve_channel(via)
-          next unless channel
-          channel.table(table_name).put(as_json_for_dexie)
+        if events.include?(:update)
+          after_commit on: :update do
+            channel = resolve_channel(via)
+            next unless channel
+
+            payload = as_json_for_dexie.slice(*saved_changes.keys)
+            payload["id"] = id
+            channel.table(table_name).put(payload)
+          end
         end
       end
     end

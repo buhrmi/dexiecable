@@ -4,7 +4,7 @@ module DexieCable
   class Railtie < Rails::Railtie
     initializer "dexiecable.active_record" do
       ActiveSupport.on_load(:active_record) do
-        extend DexieCable::ActiveRecordExt
+        include DexieCable::ActiveRecordExt
       end
     end
   end
