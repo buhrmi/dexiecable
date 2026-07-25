@@ -1,6 +1,6 @@
 # DexieCable
 
-Run Dexie.js IndexedDB operations from your Rails ActionCable channels.
+Run [Dexie.js](https://dexie.org) IndexedDB operations from your Rails ActionCable channels.
 
 DexieCable augments ActionCable channels with a query DSL that mirrors the Dexie.js API, letting you push database mutations from the server to the client in real time. It also gives you a `syncs_to_dexie` ActiveRecord macro for automatic change syncing.
 
