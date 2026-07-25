@@ -51,9 +51,8 @@ module DexieCable
             channel = resolve_channel(via)
             next unless channel
 
-            payload = as_json_for_dexie.slice(*saved_changes.keys)
-            payload["id"] = id
-            channel.table(table_name).put(payload)
+            changes = as_json_for_dexie.slice(*saved_changes.keys)
+            channel.table(table_name).update(id, changes)
           end
         end
       end
