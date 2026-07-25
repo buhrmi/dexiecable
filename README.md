@@ -144,7 +144,7 @@ end
 | Option | Default | Description |
 |---|---|---|
 | `via:` | *(required)* | Proc (evaluated in record context), channel class, or channel instance |
-| `table:` | model's `table_name` | Override the Dexie table name |
+| `table:` | model's `table_name` | Override the Dexie table name. A Proc is evaluated in the record's context. |
 | `only:` | `[:create, :update, :destroy]` | Limit which events trigger a sync |
 
 #### Customizing the synced payload

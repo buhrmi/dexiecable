@@ -17,16 +17,16 @@ module DexieCable
       # @param via    [Proc, DexieCable] Proc evaluated in record context,
       #                 must return a channel (responds to +table+). A channel
       #                 class/instance can also be passed directly. Skipped if nil.
-      # @param table  [String, Symbol] Override the Dexie table name
-      #                (defaults to the model's table_name).
+      # @param table  [String, Symbol, Proc] Override the Dexie table name
+      #                (defaults to the model's table_name). A Proc is
+      #                evaluated in the record's context.
       # @param only   [Array<Symbol>] Limit which lifecycle events sync.
       #                Default: [:create, :update, :destroy].
       def syncs_to_dexie(via:, table: nil, only: nil)
-        table_name = (table || self.table_name).to_s
-        events     = Array(only || %i[create update destroy])
+        events = Array(only || %i[create update destroy])
 
         @dexie_sync_configs ||= []
-        @dexie_sync_configs << { via: via, table: table_name, only: events }
+        @dexie_sync_configs << { via: via, table: table, only: events }
 
         if events.include?(:destroy)
           before_destroy :dexie_sync_before_destroy
@@ -34,7 +34,7 @@ module DexieCable
           after_commit on: :destroy do
             channel = resolve_channel(via)
             next unless channel
-            channel.table(table_name).delete(dexie_destroy_id)
+            channel.table(resolve_table(table)).delete(dexie_destroy_id)
           end
         end
 
@@ -42,7 +42,7 @@ module DexieCable
           after_commit on: :create do
             channel = resolve_channel(via)
             next unless channel
-            channel.table(table_name).add(as_json_for_dexie)
+            channel.table(resolve_table(table)).add(as_json_for_dexie)
           end
         end
 
@@ -52,7 +52,7 @@ module DexieCable
             next unless channel
 
             changes = as_json_for_dexie.slice(*saved_changes.keys)
-            channel.table(table_name).update(id, changes)
+            channel.table(resolve_table(table)).update(id, changes)
           end
         end
       end
@@ -64,6 +64,14 @@ module DexieCable
       case via
       when Proc then instance_exec(&via)
       else via
+      end
+    end
+
+    def resolve_table(table)
+      case table
+      when Proc   then instance_exec(&table).to_s
+      when nil    then self.class.table_name
+      else table.to_s
       end
     end
 
