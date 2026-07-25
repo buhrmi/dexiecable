@@ -11,7 +11,7 @@ class UserChannel < ApplicationCable::Channel
   def subscribed
     stream_for current_user
     recent_notifications = current_user.notifications.last(10)
-    table("notifications").add(recent_notifications)
+    table("notifications").bulkAdd(recent_notifications)
   end
 end
 ```
@@ -19,9 +19,9 @@ end
 Or from inside a controller:
 
 ```ruby
-class NotificationsChannel < ApplicationController
+class NotificationsController < ApplicationController
   def create
-    current_user.notifications.create(notification_params)
+    notification = current_user.notifications.create!(notification_params)
     UserChannel[current_user].table("notifications").add(notification)
   end
 end
@@ -36,3 +36,166 @@ end
 ```
 
 ## Installation
+
+### Ruby gem
+
+Add to your `Gemfile`:
+
+```ruby
+gem "dexiecable"
+```
+
+Then `bundle install`. The Railtie automatically extends `ActiveRecord::Base` with `syncs_to_dexie`.
+
+### npm package
+
+```bash
+npm install dexiecable
+# or
+yarn add dexiecable
+```
+
+Configure it with your Dexie database and ActionCable consumer before subscribing:
+
+```js
+import { configure, subscribe } from "dexiecable";
+import { db } from "./db";
+import { createConsumer } from "@rails/actioncable";
+
+configure({ db, consumer: createConsumer() });
+
+const sub = subscribe("UserChannel", { last_update: Date.now() });
+```
+
+If you omit `consumer`, one is created for you automatically.
+
+## Usage
+
+### `include DexieCable` in a channel
+
+```ruby
+class UserChannel < ApplicationCable::Channel
+  include DexieCable
+
+  def subscribed
+    stream_for current_user
+  end
+end
+```
+
+This gives you:
+
+| Method | Description |
+|---|---|
+| `self.[](subject)` | Returns a `ScopedChannel` bound to a subject. `UserChannel[current_user]` |
+| `table(name)` | Starts a query chain. `table("messages")` |
+
+### Chaining Dexie operations
+
+Any Dexie.js write operation triggers an immediate broadcast:
+
+```ruby
+# Single insert
+UserChannel[current_user].table("messages").add(id: 1, text: "hello")
+
+# Filtered bulk insert
+UserChannel[current_user]
+  .table("messages")
+  .where(:room_id).equals(room.id)
+  .bulkAdd(messages)
+
+# Update
+UserChannel[current_user]
+  .table("messages")
+  .where(:id).equals(msg.id)
+  .modify(read: true)
+
+# Delete
+UserChannel[current_user]
+  .table("messages")
+  .where(:room_id).equals(room.id)
+  .delete()
+```
+
+The full query chain is serialized as JSON and sent over ActionCable. The JS client replays every method call against the local Dexie database in order.
+
+### `syncs_to_dexie` — automatic model syncing
+
+Add to any ActiveRecord model:
+
+```ruby
+class Message < ApplicationRecord
+  syncs_to_dexie via: -> { UserChannel[sender] }
+  syncs_to_dexie via: -> { UserChannel[receiver] }
+  syncs_to_dexie via: PublicChannel  # broadcast to all connected clients
+end
+```
+
+| Event | Action |
+|---|---|
+| `after_commit on: :create` | `channel.table("messages").add(record.as_json_for_dexie)` |
+| `after_commit on: :update` | `channel.table("messages").put(record.as_json_for_dexie)` |
+| `after_commit on: :destroy` | `channel.table("messages").delete(record.id)` |
+
+#### Options
+
+| Option | Default | Description |
+|---|---|---|
+| `via:` | *(required)* | Proc (evaluated in record context), channel class, or channel instance |
+| `table:` | model's `table_name` | Override the Dexie table name |
+| `only:` | `[:create, :update, :destroy]` | Limit which events trigger a sync |
+
+#### Customizing the synced payload
+
+Override `as_json_for_dexie` in your model:
+
+```ruby
+class Message < ApplicationRecord
+  syncs_to_dexie via: -> { UserChannel[sender] }
+
+  def as_json_for_dexie
+    super.merge(room_name: room.name)
+  end
+end
+```
+
+## How it works
+
+```mermaid
+sequenceDiagram
+    participant Model as ActiveRecord Model
+    participant Channel as DexieCable Channel
+    participant WS as ActionCable WebSocket
+    participant JS as dexiecable.js
+    participant DB as Dexie.js (IndexedDB)
+
+    Model->>Channel: after_commit
+    Channel->>Channel: build Query DSL
+    Channel->>WS: broadcast JSON { table, ops }
+    WS->>JS: received(data)
+    JS->>DB: replay ops chain
+    DB-->>JS: result
+```
+
+The Ruby side builds a JSON payload like:
+
+```json
+{
+  "table": "messages",
+  "ops": [
+    { "method": "where", "params": ["room_id"] },
+    { "method": "equals", "params": [5] },
+    { "method": "add", "params": [{ "id": 1, "text": "hello" }] }
+  ]
+}
+```
+
+The JS side replays it as:
+
+```js
+dexie.messages.where("room_id").equals(5).add({ id: 1, text: "hello" })
+```
+
+## License
+
+MIT

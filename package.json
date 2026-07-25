@@ -1,0 +1,18 @@
+{
+  "name": "dexiecable",
+  "version": "0.1.0",
+  "description": "Client-side companion for the DexieCable Ruby gem. Receives Dexie.js mutations from ActionCable and replays them against a local IndexedDB database.",
+  "main": "src/index.js",
+  "files": [
+    "src"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/keoscout/dexiecable"
+  },
+  "peerDependencies": {
+    "@rails/actioncable": ">= 7.0",
+    "dexie": ">= 3.0"
+  }
+}
