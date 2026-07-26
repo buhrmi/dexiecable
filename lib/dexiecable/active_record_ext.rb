@@ -34,7 +34,7 @@ module DexieCable
       #                 returns truthy (evaluated in the record's context).
       # @param unless  [Symbol, Proc] Skip sync if the given method or proc
       #                 returns truthy (evaluated in the record's context).
-      def syncs_to_dexia(via:, subject: nil, table: nil, only: nil, **options)
+      def syncs_to_dexie(via:, subject: nil, table: nil, only: nil, **options)
         events     = Array(only || %i[create update destroy])
         conditions = options.slice(:if, :unless)
 
