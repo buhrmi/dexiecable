@@ -22,16 +22,21 @@ module DexieCable
       #                evaluated in the record's context.
       # @param only   [Array<Symbol>] Limit which lifecycle events sync.
       #                Default: [:create, :update, :destroy].
-      def syncs_to_dexie(via:, table: nil, only: nil)
-        events = Array(only || %i[create update destroy])
+      # @param if     [Symbol, Proc] Only sync if the given method or proc
+      #                returns truthy (evaluated in the record's context).
+      # @param unless [Symbol, Proc] Skip sync if the given method or proc
+      #                returns truthy (evaluated in the record's context).
+      def syncs_to_dexie(via:, table: nil, only: nil, **options)
+        events     = Array(only || %i[create update destroy])
+        conditions = options.slice(:if, :unless)
 
         @dexie_sync_configs ||= []
-        @dexie_sync_configs << { via: via, table: table, only: events }
+        @dexie_sync_configs << { via: via, table: table, only: events, **conditions }
 
         if events.include?(:destroy)
           before_destroy :dexie_sync_before_destroy
 
-          after_commit on: :destroy do
+          after_commit on: :destroy, **conditions do
             channel = resolve_channel(via)
             next unless channel
             channel.table(resolve_table(table)).delete(dexie_destroy_id)
@@ -39,7 +44,7 @@ module DexieCable
         end
 
         if events.include?(:create)
-          after_commit on: :create do
+          after_commit on: :create, **conditions do
             channel = resolve_channel(via)
             next unless channel
             channel.table(resolve_table(table)).add(as_json_for_dexie)
@@ -47,7 +52,7 @@ module DexieCable
         end
 
         if events.include?(:update)
-          after_commit on: :update do
+          after_commit on: :update, **conditions do
             channel = resolve_channel(via)
             next unless channel
 

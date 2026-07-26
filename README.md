@@ -131,7 +131,7 @@ Add to any ActiveRecord model:
 class Message < ApplicationRecord
   syncs_to_dexie via: -> { UserChannel[sender] }
   syncs_to_dexie via: -> { UserChannel[receiver] }
-  syncs_to_dexie via: PublicChannel  # broadcast to all connected clients
+  syncs_to_dexie via: RoomChannel['public']
 end
 ```
 
@@ -145,9 +145,23 @@ end
 
 | Option | Default | Description |
 |---|---|---|
-| `via:` | *(required)* | Proc (evaluated in record context), channel class, or channel instance |
+| `via:` | *(required)* | Proc (evaluated in record context), or channel instance |
 | `table:` | model's `table_name` | Override the Dexie table name. A Proc is evaluated in the record's context. |
 | `only:` | `[:create, :update, :destroy]` | Limit which events trigger a sync |
+| `if:` | *(none)* | Symbol (method name) or Proc — only sync when it returns truthy |
+| `unless:` | *(none)* | Symbol (method name) or Proc — skip sync when it returns truthy |
+
+You can combine multiple `syncs_to_dexie` declarations, each with different conditions:
+
+```ruby
+class Message < ApplicationRecord
+  syncs_to_dexie via: -> { UserChannel[sender] },
+                 if: :published?
+
+  syncs_to_dexie via: -> { AdminChannel },
+                 unless: -> { draft? }
+end
+```
 
 #### Customizing the synced payload
 
