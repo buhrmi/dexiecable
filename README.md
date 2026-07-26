@@ -141,11 +141,13 @@ class Message < ApplicationRecord
 end
 ```
 
+Internally, `syncs_to_dexie` sets up the following ActiveRecord callbacks:
+
 | Event | Action |
 |---|---|
-| `after_commit on: :create` | `channel.table("messages").add(record.as_json_for_dexie)` |
-| `after_commit on: :update` | `channel.table("messages").put(record.as_json_for_dexie)` |
-| `after_commit on: :destroy` | `channel.table("messages").delete(record.id)` |
+| `after_commit on: :create` | `channel.table(table).add(record.as_json_for_dexie)` |
+| `after_commit on: :update` | `channel.table(table).put(record.as_json_for_dexie)` |
+| `after_commit on: :destroy` | `channel.table(table).delete(record.id)` |
 
 #### Options
 
