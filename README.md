@@ -100,17 +100,19 @@ Any Dexie.js write operation triggers an immediate broadcast:
 # Single insert
 UserChannel[current_user].table("messages").add(id: 1, text: "hello")
 
-# Filtered bulk insert
-UserChannel[current_user]
-  .table("messages")
-  .where(:room_id).equals(room.id)
-  .bulkAdd(messages)
+# Bulk insert
+UserChannel[current_user].table("messages").bulkAdd(messages)
 
-# Update
+# Update (using modify)
 UserChannel[current_user]
   .table("messages")
   .where(:id).equals(msg.id)
   .modify(read: true)
+
+# Update (using update)
+UserChannel[current_user]
+  .table("messages")
+  .update(msg.id, text: "updated text")
 
 # Delete
 UserChannel[current_user]
