@@ -57,19 +57,23 @@ npm install dexiecable
 yarn add dexiecable
 ```
 
-Configure it with your Dexie database and ActionCable consumer before subscribing:
+Set `DexieCable.db` to your Dexie database instance:
 
 ```js
-import { configure, subscribe } from "dexiecable";
+import DexieCable from "dexiecable";
 import { db } from "./db";
-import { createConsumer } from "@rails/actioncable";
 
-configure({ db, consumer: createConsumer() });
-
-const sub = subscribe("UserChannel", { last_update: Date.now() });
+DexieCable.db = db;
+DexieCable.subscribe("UserChannel", { last_update: Date.now() });
 ```
 
-If you omit `consumer`, one is created for you automatically.
+You can also set an ActionCable `consumer`. If omitted, one is created for you automatically:
+
+```js
+import { createConsumer } from "@rails/actioncable";
+
+DexieCable.consumer = createConsumer();
+```
 
 ## Usage
 
