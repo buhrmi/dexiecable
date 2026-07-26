@@ -9,35 +9,43 @@ module DexieCable
       # DexieCable channel.
       #
       #   class Message < ApplicationRecord
-      #     syncs_to_dexie via: -> { UserChannel[sender] }
-      #     syncs_to_dexie via: -> { UserChannel[receiver] }
-      #     syncs_to_dexie via: PublicChannel
+      #     syncs_to_dexia via: UserChannel, subject: :sender
+      #     syncs_to_dexia via: UserChannel, subject: "global_feed"
+      #     syncs_to_dexia via: UserChannel, subject: -> { conversation.users }
+      #     syncs_to_dexia via: PublicChannel
       #   end
       #
-      # @param via    [Proc, DexieCable, Array<DexieCable>] Proc evaluated in
-      #                 record context, must return a channel (or array of
-      #                 channels) that responds to +table+. Skipped if nil.
-      # @param table  [String, Symbol, Proc] Override the Dexie table name
-      #                (defaults to the model's table_name). A Proc is
-      #                evaluated in the record's context.
-      # @param only   [Array<Symbol>] Limit which lifecycle events sync.
-      #                Default: [:create, :update, :destroy].
-      # @param if     [Symbol, Proc] Only sync if the given method or proc
-      #                returns truthy (evaluated in the record's context).
-      # @param unless [Symbol, Proc] Skip sync if the given method or proc
-      #                returns truthy (evaluated in the record's context).
-      def syncs_to_dexie(via:, table: nil, only: nil, **options)
+      # @param via     [Class] A DexieCable channel class. When +subject+
+      #                  is given, each subject is mapped through
+      #                  +via[subject]+ to produce scoped channels.
+      #                  Without +subject+, +via+ is used directly as an
+      #                  unscoped channel.
+      # @param subject [Proc, Symbol, String] A Proc evaluated in record
+      #                  context, a Symbol to call via +send+, or a String
+      #                  used directly as the stream name for +broadcast_to+.
+      #                  Must return a single subject or collection of
+      #                  subjects.
+      # @param table   [String, Symbol, Proc] Override the Dexie table name
+      #                 (defaults to the model's table_name). A Proc is
+      #                 evaluated in the record's context.
+      # @param only    [Array<Symbol>] Limit which lifecycle events sync.
+      #                 Default: [:create, :update, :destroy].
+      # @param if      [Symbol, Proc] Only sync if the given method or proc
+      #                 returns truthy (evaluated in the record's context).
+      # @param unless  [Symbol, Proc] Skip sync if the given method or proc
+      #                 returns truthy (evaluated in the record's context).
+      def syncs_to_dexia(via:, subject: nil, table: nil, only: nil, **options)
         events     = Array(only || %i[create update destroy])
         conditions = options.slice(:if, :unless)
 
         @dexie_sync_configs ||= []
-        @dexie_sync_configs << { via: via, table: table, only: events, **conditions }
+        @dexie_sync_configs << { via: via, subject: subject, table: table, only: events, **conditions }
 
         if events.include?(:destroy)
           before_destroy :dexie_sync_before_destroy
 
           after_commit on: :destroy, **conditions do
-            Array(resolve_channel(via)).each do |channel|
+            Array(resolve_channel(via, subject)).each do |channel|
               next unless channel
               channel.table(resolve_table(table)).delete(dexie_destroy_id)
             end
@@ -46,7 +54,7 @@ module DexieCable
 
         if events.include?(:create)
           after_commit on: :create, **conditions do
-            Array(resolve_channel(via)).each do |channel|
+            Array(resolve_channel(via, subject)).each do |channel|
               next unless channel
               channel.table(resolve_table(table)).add(as_json_for_dexie)
             end
@@ -55,7 +63,7 @@ module DexieCable
 
         if events.include?(:update)
           after_commit on: :update, **conditions do
-            Array(resolve_channel(via)).each do |channel|
+            Array(resolve_channel(via, subject)).each do |channel|
               next unless channel
 
               changes = as_json_for_dexie.slice(*saved_changes.keys)
@@ -68,10 +76,20 @@ module DexieCable
 
     private
 
-    def resolve_channel(via)
-      case via
-      when Proc then instance_exec(&via)
-      else via
+    def resolve_channel(via, subject = nil)
+      if subject
+        subjects = resolve_subject(subject)
+        Array(subjects).map { |s| via[s] }
+      else
+        via
+      end
+    end
+
+    def resolve_subject(subject)
+      case subject
+      when Proc   then instance_exec(&subject)
+      when Symbol then send(subject)
+      else subject
       end
     end
 
