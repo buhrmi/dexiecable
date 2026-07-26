@@ -9,10 +9,10 @@ module DexieCable
       # DexieCable channel.
       #
       #   class Message < ApplicationRecord
-      #     syncs_to_dexia via: UserChannel, subject: :sender
-      #     syncs_to_dexia via: UserChannel, subject: "global_feed"
-      #     syncs_to_dexia via: UserChannel, subject: -> { conversation.users }
-      #     syncs_to_dexia via: PublicChannel
+      #     syncs_to_dexie via: UserChannel, subject: :sender
+      #     syncs_to_dexie via: UserChannel, subject: "global_feed"
+      #     syncs_to_dexie via: UserChannel, subject: -> { conversation.users }
+      #     syncs_to_dexie via: PublicChannel
       #   end
       #
       # @param via     [Class] A DexieCable channel class. When +subject+

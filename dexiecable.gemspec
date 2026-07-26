@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.summary       = "Run Dexie.js IndexedDB operations from your Rails ActionCable channels."
   spec.description   = "DexieCable augments ActionCable channels with a query DSL that mirrors " \
                        "the Dexie.js API, letting you push database mutations from the server to " \
-                       "the client in real time. Includes an ActiveRecord macro (syncs_to_dexia) " \
+                       "the client in real time. Includes an ActiveRecord macro (syncs_to_dexie) " \
                        "for automatic change syncing."
   spec.homepage      = "https://github.com/buhrmi/dexiecable"
   spec.license       = "MIT"
