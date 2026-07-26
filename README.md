@@ -129,9 +129,11 @@ Add to any ActiveRecord model:
 
 ```ruby
 class Message < ApplicationRecord
+  # Sync to a single user.
   syncs_to_dexie via: -> { UserChannel[sender] }
-  syncs_to_dexie via: -> { UserChannel[receiver] }
-  syncs_to_dexie via: RoomChannel['public']
+
+  # Sync to all participants of a conversation.
+  syncs_to_dexie via: -> { conversation.participants.map { |u| UserChannel[u] } }
 end
 ```
 
@@ -145,7 +147,7 @@ end
 
 | Option | Default | Description |
 |---|---|---|
-| `via:` | *(required)* | Proc (evaluated in record context), or channel instance |
+| `via:` | *(required)* | Proc (evaluated in record context), a channel, or an array of channels |
 | `table:` | model's `table_name` | Override the Dexie table name. A Proc is evaluated in the record's context. |
 | `only:` | `[:create, :update, :destroy]` | Limit which events trigger a sync |
 | `if:` | *(none)* | Symbol (method name) or Proc — only sync when it returns truthy |

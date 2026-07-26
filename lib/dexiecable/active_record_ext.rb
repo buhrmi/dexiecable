@@ -14,9 +14,9 @@ module DexieCable
       #     syncs_to_dexie via: PublicChannel
       #   end
       #
-      # @param via    [Proc, DexieCable] Proc evaluated in record context,
-      #                 must return a channel (responds to +table+). A channel
-      #                 class/instance can also be passed directly. Skipped if nil.
+      # @param via    [Proc, DexieCable, Array<DexieCable>] Proc evaluated in
+      #                 record context, must return a channel (or array of
+      #                 channels) that responds to +table+. Skipped if nil.
       # @param table  [String, Symbol, Proc] Override the Dexie table name
       #                (defaults to the model's table_name). A Proc is
       #                evaluated in the record's context.
@@ -37,27 +37,30 @@ module DexieCable
           before_destroy :dexie_sync_before_destroy
 
           after_commit on: :destroy, **conditions do
-            channel = resolve_channel(via)
-            next unless channel
-            channel.table(resolve_table(table)).delete(dexie_destroy_id)
+            Array(resolve_channel(via)).each do |channel|
+              next unless channel
+              channel.table(resolve_table(table)).delete(dexie_destroy_id)
+            end
           end
         end
 
         if events.include?(:create)
           after_commit on: :create, **conditions do
-            channel = resolve_channel(via)
-            next unless channel
-            channel.table(resolve_table(table)).add(as_json_for_dexie)
+            Array(resolve_channel(via)).each do |channel|
+              next unless channel
+              channel.table(resolve_table(table)).add(as_json_for_dexie)
+            end
           end
         end
 
         if events.include?(:update)
           after_commit on: :update, **conditions do
-            channel = resolve_channel(via)
-            next unless channel
+            Array(resolve_channel(via)).each do |channel|
+              next unless channel
 
-            changes = as_json_for_dexie.slice(*saved_changes.keys)
-            channel.table(resolve_table(table)).update(id, changes)
+              changes = as_json_for_dexie.slice(*saved_changes.keys)
+              channel.table(resolve_table(table)).update(id, changes)
+            end
           end
         end
       end
