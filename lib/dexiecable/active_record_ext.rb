@@ -9,22 +9,22 @@ module DexieCable
       # DexieCable channel.
       #
       #   class Message < ApplicationRecord
-      #     syncs_to_dexie via: UserChannel, subject: :sender
-      #     syncs_to_dexie via: UserChannel, subject: "global_feed"
-      #     syncs_to_dexie via: UserChannel, subject: -> { conversation.users }
+      #     syncs_to_dexie via: UserChannel, to: :sender
+      #     syncs_to_dexie via: UserChannel, to: "global_feed"
+      #     syncs_to_dexie via: UserChannel, to: -> { conversation.users }
       #     syncs_to_dexie via: PublicChannel
       #   end
       #
-      # @param via     [Class] A DexieCable channel class. When +subject+
-      #                  is given, each subject is mapped through
-      #                  +via[subject]+ to produce scoped channels.
-      #                  Without +subject+, +via+ is used directly as an
+      # @param via     [Class] A DexieCable channel class. When +to+
+      #                  is given, each recipient is mapped through
+      #                  +via[to]+ to produce scoped channels.
+      #                  Without +to+, +via+ is used directly as an
       #                  unscoped channel.
-      # @param subject [Proc, Symbol, String] A Proc evaluated in record
+      # @param to      [Proc, Symbol, String] A Proc evaluated in record
       #                  context, a Symbol to call via +send+, or a String
       #                  used directly as the stream name for +broadcast_to+.
-      #                  Must return a single subject or collection of
-      #                  subjects.
+      #                  Must return a single recipient or collection of
+      #                  recipients.
       # @param table   [String, Symbol, Proc] Override the Dexie table name
       #                 (defaults to the model's table_name). A Proc is
       #                 evaluated in the record's context.
@@ -34,18 +34,18 @@ module DexieCable
       #                 returns truthy (evaluated in the record's context).
       # @param unless  [Symbol, Proc] Skip sync if the given method or proc
       #                 returns truthy (evaluated in the record's context).
-      def syncs_to_dexie(via:, subject: nil, table: nil, only: nil, **options)
+      def syncs_to_dexie(via:, to: nil, table: nil, only: nil, **options)
         events     = Array(only || %i[create update destroy])
         conditions = options.slice(:if, :unless)
 
         @dexie_sync_configs ||= []
-        @dexie_sync_configs << { via: via, subject: subject, table: table, only: events, **conditions }
+        @dexie_sync_configs << { via: via, to: to, table: table, only: events, **conditions }
 
         if events.include?(:destroy)
           before_destroy :dexie_sync_before_destroy
 
           after_commit on: :destroy, **conditions do
-            Array(resolve_channel(via, subject)).each do |channel|
+            Array(resolve_channel(via, to)).each do |channel|
               next unless channel
               channel.table(resolve_table(table)).delete(dexie_destroy_id)
             end
@@ -54,7 +54,7 @@ module DexieCable
 
         if events.include?(:create)
           after_commit on: :create, **conditions do
-            Array(resolve_channel(via, subject)).each do |channel|
+            Array(resolve_channel(via, to)).each do |channel|
               next unless channel
               channel.table(resolve_table(table)).add(as_json_for_dexie)
             end
@@ -63,7 +63,7 @@ module DexieCable
 
         if events.include?(:update)
           after_commit on: :update, **conditions do
-            Array(resolve_channel(via, subject)).each do |channel|
+            Array(resolve_channel(via, to)).each do |channel|
               next unless channel
 
               changes = as_json_for_dexie.slice(*saved_changes.keys)
@@ -76,20 +76,20 @@ module DexieCable
 
     private
 
-    def resolve_channel(via, subject = nil)
-      if subject
-        subjects = resolve_subject(subject)
-        Array(subjects).map { |s| via[s] }
+    def resolve_channel(via, to = nil)
+      if to
+        recipients = resolve_recipient(to)
+        Array(recipients).map { |r| via[r] }
       else
         via
       end
     end
 
-    def resolve_subject(subject)
-      case subject
-      when Proc   then instance_exec(&subject)
-      when Symbol then send(subject)
-      else subject
+    def resolve_recipient(to)
+      case to
+      when Proc   then instance_exec(&to)
+      when Symbol then send(to)
+      else to
       end
     end
 

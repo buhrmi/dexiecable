@@ -2,9 +2,9 @@
 
 module DexieCable
   class ScopedChannel
-    def initialize(klass, subject)
-      @klass   = klass
-      @subject = subject
+    def initialize(klass, recipient)
+      @klass     = klass
+      @recipient = recipient
     end
 
     def table(name)
@@ -12,7 +12,7 @@ module DexieCable
     end
 
     def transmit(data)
-      @klass.broadcast_to @subject, data
+      @klass.broadcast_to @recipient, data
     end
   end
 end

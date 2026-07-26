@@ -6,12 +6,12 @@ module DexieCable
   included do
     public :transmit
 
-    # Open a scoped channel for broadcasting to a specific subject.
+    # Open a scoped channel for broadcasting to a specific recipient.
     #
     #   UserChannel[current_user].table("notifications").add(notification)
     #
-    def self.[](subject)
-      ScopedChannel.new(self, subject)
+    def self.[](recipient)
+      ScopedChannel.new(self, recipient)
     end
 
     # Build a query against a Dexie table, transmitted to all subscribers

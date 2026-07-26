@@ -2,7 +2,7 @@
 
 Run [Dexie.js](https://dexie.org) IndexedDB operations from your Rails ActionCable channels.
 
-DexieCable augments ActionCable channels with a query DSL that mirrors the Dexie.js API, letting you push database mutations from the server to the client in real time. It also gives you a `syncs_to_dexie` ActiveRecord macro for automatic change syncing.
+DexieCable augments ActionCable channels with a query DSL that mirrors the Dexie.js API, letting you push database mutations from the server to the client in real time. It also gives you a [`syncs_to_dexie`](#syncs_to_dexie--automatic-model-syncing) ActiveRecord macro for automatic change syncing.
 
 You can run any Dexie table update directly inside a channel:
 
@@ -29,11 +29,11 @@ class NotificationsController < ApplicationController
 end
 ```
 
-An even more convenient way is to use the `syncs_to_dexie` macro:
+An even more convenient way is to use the `syncs_to_dexie` macro (more info [below](#syncs_to_dexie--automatic-model-syncing))
 
 ```ruby
 class Notification < ApplicationRecord
-  syncs_to_dexie via: UserChannel, subject: :user
+  syncs_to_dexie via: UserChannel, to: :user
 end
 ```
 
@@ -89,7 +89,7 @@ This gives you:
 
 | Method | Description |
 |---|---|
-| `self.[](subject)` | Returns a `ScopedChannel` bound to a subject. `UserChannel[current_user]` |
+| `self.[](to)` | Returns a `ScopedChannel` bound to a recipient. `UserChannel[current_user]` |
 | `table(name)` | Starts a query chain. `table("messages")` |
 
 ### Chaining Dexie operations
@@ -125,19 +125,19 @@ The full query chain is serialized as JSON and sent over ActionCable. The JS cli
 
 ### `syncs_to_dexie` — automatic model syncing
 
-Add to any ActiveRecord model. `subject` is what gets passed to `broadcast_to` as the stream target:
+Add to any ActiveRecord model. Just provide the channel class and the broadcast target.
 
 ```ruby
 class Message < ApplicationRecord
-  # Calls send(:receiver), then broadcasts: broadcast_to(receiver, ...)
-  syncs_to_dexie via: UserChannel, subject: :receiver
+  # Calls send(:receiver), then broadcasts: UserChannel.broadcast_to(receiver, ...)
+  syncs_to_dexie via: UserChannel, to: :receiver
 
-  # String used directly: broadcast_to("global_feed", ...)
-  syncs_to_dexie via: UserChannel, subject: "global_feed"
+  # String used directly: UserChannel.broadcast_to("global_feed", ...)
+  syncs_to_dexie via: UserChannel, to: "global_feed"
 
   # Procs are also supported. If an array is returned, multiple broadcasts are made
-  # conversation.users.each { |u| broadcast_to(u, ...) }
-  syncs_to_dexie via: UserChannel, subject: -> { conversation.users }
+  # conversation.users.each { |u| UserChannel.broadcast_to(u, ...) }
+  syncs_to_dexie via: UserChannel, to: -> { conversation.users }
 end
 ```
 
@@ -154,7 +154,7 @@ Internally, `syncs_to_dexie` sets up the following ActiveRecord callbacks:
 | Option | Default | Description |
 |---|---|---|
 | `via:` | *(required)* | A DexieCable channel class |
-| `subject:` | *(none)* | The stream target passed to `broadcast_to`. Symbol → calls `send`. String → used as-is. Proc → evaluated in record context. Returns a single subject or collection. |
+| `to:` | *(none)* | The stream target passed to `broadcast_to`. Symbol → calls `send`. String → used as-is. Proc → evaluated in record context. Returns a single recipient or collection. |
 | `table:` | model's `table_name` | Override the Dexie table name. A Proc is evaluated in the record's context. |
 | `only:` | `[:create, :update, :destroy]` | Limit which events trigger a sync |
 | `if:` | *(none)* | Symbol (method name) or Proc — only sync when it returns truthy |
@@ -164,7 +164,7 @@ You can combine multiple `syncs_to_dexie` declarations, each with different cond
 
 ```ruby
 class Message < ApplicationRecord
-  syncs_to_dexie via: UserChannel, subject: -> { sender },
+  syncs_to_dexie via: UserChannel, to: -> { sender },
                  if: :published?
 
   syncs_to_dexie via: AdminChannel,
@@ -178,7 +178,7 @@ Override `as_json_for_dexie` in your model:
 
 ```ruby
 class Message < ApplicationRecord
-  syncs_to_dexie via: UserChannel, subject: :sender
+  syncs_to_dexie via: UserChannel, to: :sender
 
   def as_json_for_dexie
     super.merge(room_name: room.name)
