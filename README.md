@@ -1,6 +1,6 @@
 # DexieCable
 
-Run [Dexie.js](https://dexie.org) IndexedDB operations from your Rails ActionCable channels.
+Read the [blog post introducing DexieCable](https://dev.to/buhrmi/real-time-rails-without-turbo-modern-reactive-uis-with-inertia-and-dexiecable-4lge)
 
 DexieCable augments ActionCable channels with a query DSL that mirrors the Dexie.js API, letting you push database mutations from the server to the client in real time. It also gives you a [`syncs_to_dexie`](#syncs_to_dexie--automatic-model-syncing) ActiveRecord macro for automatic change syncing.
 
@@ -57,7 +57,7 @@ npm install dexiecable
 yarn add dexiecable
 ```
 
-Set `DexieCable.db` to your Dexie database instance:
+Assign your Dexie database to `DexieCable.db` and subscribe to a channel:
 
 ```js
 import DexieCable from "dexiecable";
@@ -67,7 +67,7 @@ DexieCable.db = db;
 DexieCable.subscribe("UserChannel", { last_update: Date.now() });
 ```
 
-When calling `subscribe()`, DexieCable automatically creates a consumer and saves it on `DexieCable.consumer`. If you need to access the consumer earlier, you can create one yourself:
+DexieCable automatically creates a consumer and assigns it to `DexieCable.consumer`. If you need to access the consumer earlier in your app, you can create one yourself:
 
 ```js
 // DexieCable ships with its own version of ActionCable (see below).
