@@ -64,7 +64,7 @@ import DexieCable from "dexiecable";
 import { db } from "./db";
 
 DexieCable.db = db;
-DexieCable.subscribe("UserChannel", { last_update: Date.now() });
+DexieCable.subscribe("UserChannel");
 ```
 
 DexieCable automatically creates a consumer and assigns it to `DexieCable.consumer`. If you need to access the consumer earlier in your app, you can create one yourself:
