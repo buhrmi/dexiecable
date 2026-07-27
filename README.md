@@ -247,7 +247,7 @@ import { db, getLastSeqId } from './database';
 const roomId = 123;
 
 subscribe(db, {
-  channel: "ChatChannel",
+  channel: "RoomChannel",
   room_id: roomId,
   seq_id: () => getLastSeqId(roomId) // evaluated fresh on each reconnect
 });
@@ -256,9 +256,9 @@ subscribe(db, {
 Send missed messages on reconnection:
 
 ```ruby
-class ChatChannel < ApplicationChannel:Base
+class RoomChannel < ApplicationChannel:Base
   def subscribed
-    stream_from "chat:#{params[:room_id]}"
+    stream_from "room:#{params[:room_id]}"
     missed_messages = room.messages.where("seq_id > ?", params[:seq_id])
     table("messages").bulkAdd(missed_messages)
   end
