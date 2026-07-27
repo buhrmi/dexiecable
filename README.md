@@ -261,6 +261,7 @@ class ChatChannel < ApplicationChannel:Base
     table("messages").bulkAdd(missed_messages)
   end
 end
+```
 
 ## License
 
