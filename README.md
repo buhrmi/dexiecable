@@ -241,13 +241,10 @@ extension: **channel params can be functions**. When a param value is a
 function, it is called and awaited at subscribe time — use this to submit the latest known sequence ID on connection:
 
 ```js
-import { createConsumer } from "dexiecable";
-import { getLastMessageId } from './database';
+import { subscribe } from "dexiecable";
+import { db, getLastMessageId } from './database';
 
-const consumer = createConsumer();
-
-consumer.subscriptions.create(
-  {
+subscribe(db, {
     channel: "ChatChannel",
     room_id: 123,
     seq_id: getLastMessageId // evaluated fresh on each reconnect
