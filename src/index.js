@@ -10,56 +10,71 @@ if (typeof window !== "undefined") {
 }
 
 // ---------------------------------------------------------------------------
+// Module state
+// ---------------------------------------------------------------------------
+
+/** @type {import("@rails/actioncable").Consumer | null} */
+let consumer = null;
+
+// ---------------------------------------------------------------------------
 // Public API
 // ---------------------------------------------------------------------------
 
-const DexieCable = {
-  /** @type {import("@rails/actioncable").Consumer} */
-  consumer: null,
+/**
+ * Get the current ActionCable consumer (lazily creates one if needed).
+ * @returns {import("@rails/actioncable").Consumer}
+ */
+export function getConsumer() {
+  consumer ||= createConsumer();
+  return consumer;
+}
 
-  /**
-   * Subscribe to a DexieCable channel.
-   *
-   * @param {import("dexie").Dexie} db - Your Dexie database instance.
-   * @param {string} channel - Channel class name (e.g. "UserChannel").
-   * @param {Record<string, any>} [params={}] - Extra parameters sent on subscription.
-   * @param {object} [callbacks={}] - ActionCable lifecycle callbacks.
-   * @returns {import("@rails/actioncable").Subscription}
-   *
-   * @example
-   *   import DexieCable from "dexiecable";
-   *   import { db } from "./db";
-   *
-   *   DexieCable.subscribe(db, "UserChannel", { last_update: Date.now() });
-   */
-  subscribe(db, channel, params = {}, callbacks = {}) {
-    if (!db) {
-      throw new Error("[dexiecable] Pass a Dexie database as the first argument to subscribe().");
-    }
+/**
+ * Set a custom ActionCable consumer.
+ * @param {import("@rails/actioncable").Consumer} c
+ */
+export function setConsumer(c) {
+  consumer = c;
+}
 
-    params = { channel, ...params };
-    callbacks = {
-      connected() {
-        console.log(`[dexiecable] Connected to ${channel}`);
-      },
-      disconnected({ willAttemptReconnect }) {
-        console.log(`[dexiecable] Disconnected from ${channel}`);
-        if (!willAttemptReconnect || unloading) return;
-        this.reconnecting?.();
-      },
-      received(data) {
-        replay(db, data);
-      },
-      ...callbacks,
-    };
+/**
+ * Subscribe to a DexieCable channel.
+ *
+ * @param {import("dexie").Dexie} db - Your Dexie database instance.
+ * @param {string} channel - Channel class name (e.g. "UserChannel").
+ * @param {Record<string, any>} [params={}] - Extra parameters sent on subscription.
+ * @param {object} [callbacks={}] - ActionCable lifecycle callbacks.
+ * @returns {import("@rails/actioncable").Subscription}
+ *
+ * @example
+ *   import { subscribe } from "dexiecable";
+ *   import { db } from "./db";
+ *
+ *   subscribe(db, "UserChannel", { last_update: Date.now() });
+ */
+export function subscribe(db, channel, params = {}, callbacks = {}) {
+  if (!db) {
+    throw new Error("[dexiecable] Pass a Dexie database as the first argument to subscribe().");
+  }
 
-    DexieCable.consumer ||= createConsumer();
-    return DexieCable.consumer.subscriptions.create(params, callbacks);
-  },
-};
+  params = { channel, ...params };
+  callbacks = {
+    connected() {
+      console.log(`[dexiecable] Connected to ${channel}`);
+    },
+    disconnected({ willAttemptReconnect }) {
+      console.log(`[dexiecable] Disconnected from ${channel}`);
+      if (!willAttemptReconnect || unloading) return;
+      this.reconnecting?.();
+    },
+    received(data) {
+      replay(db, data);
+    },
+    ...callbacks,
+  };
 
-export const { subscribe } = DexieCable;
-export default DexieCable;
+  return getConsumer().subscriptions.create(params, callbacks);
+}
 
 // ---------------------------------------------------------------------------
 // Internal

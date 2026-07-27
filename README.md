@@ -60,19 +60,22 @@ yarn add dexiecable
 Pass your Dexie database as the first argument to `subscribe()`:
 
 ```js
-import DexieCable from "dexiecable";
+import { subscribe } from "dexiecable";
 import { db } from "./db";
 
-DexieCable.subscribe(db, "UserChannel");
+subscribe(db, "UserChannel");
 ```
 
-DexieCable automatically creates a consumer and assigns it to `DexieCable.consumer`. If you need to access the consumer earlier in your app, you can create one yourself:
+A consumer is lazily created on the first `subscribe()` call. If you need to access or set the consumer explicitly, use `getConsumer()` and `setConsumer()`:
 
 ```js
-// DexieCable ships with its own version of ActionCable (see below).
-import { createConsumer } from "dexiecable";
+import { getConsumer, setConsumer, createConsumer } from "dexiecable";
 
-DexieCable.consumer = createConsumer();
+// Get the consumer (creates one lazily if needed)
+const consumer = getConsumer();
+
+// Or set a custom one
+setConsumer(createConsumer("wss://example.com/cable"));
 ```
 
 ## Usage
