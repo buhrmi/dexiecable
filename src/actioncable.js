@@ -317,11 +317,11 @@ const extend = function(object, properties) {
   return object;
 };
 
-function resolveParams(params) {
+async function resolveParams(params) {
   const resolved = {};
   for (const key in params) {
     const value = params[key];
-    resolved[key] = typeof value === "function" ? value() : value;
+    resolved[key] = typeof value === "function" ? await value() : value;
   }
   return resolved;
 }
@@ -444,8 +444,8 @@ class Subscriptions {
     }
     return subscriptions.map((subscription => typeof subscription[callbackName] === "function" ? subscription[callbackName](...args) : undefined));
   }
-  subscribe(subscription) {
-    subscription.identifier = JSON.stringify(resolveParams(subscription.params));
+  async subscribe(subscription) {
+    subscription.identifier = JSON.stringify(await resolveParams(subscription.params));
     if (this.sendCommand(subscription, "subscribe")) {
       this.guarantor.guarantee(subscription);
     }
