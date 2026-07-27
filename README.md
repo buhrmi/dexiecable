@@ -228,12 +228,13 @@ The JS side replays it as:
 dexie.messages.where("room_id").equals(5).add({ id: 1, text: "hello" })
 ```
 
-## Bundled ActionCable client
+## Syncing missed records on reconnection
 
-DexieCable ships its own version of the ActionCable client with one key
+A common pattern to avoid data loss during transient disconnections is using sequence IDs to bridge the offline gap. When a connection drops, updates continue on the server. Sending the client’s latest known sequence ID upon reconnect allows the backend to query and stream only the records missed while offline.
+
+To enable this, DexieCable ships its own version of the ActionCable client with one key
 extension: **channel params can be functions**. When a param value is a
-function, it is called and awaited at subscribe time — useful for dynamic
-values that may change between disconnects/reconnects.
+function, it is called and awaited at subscribe time — use this to submit the latest known sequence ID on connection:
 
 ```js
 import { createConsumer } from "dexiecable";
@@ -245,10 +246,21 @@ consumer.subscriptions.create(
   {
     channel: "ChatChannel",
     room_id: 123,
-    last_message_id: getLastMessageId // evaluated fresh on each reconnect
+    seq_id: getLastMessageId // evaluated fresh on each reconnect
   }
 );
 ```
+
+Send missed messages on reconnection:
+
+```ruby
+class ChatChannel < ApplicationChannel:Base
+  def subscribed
+    stream_from "chat:#{params[:room_id]}"
+    missed_messages = room.messages.where("seq_id > ?", params[:seq_id])
+    table("messages").bulkAdd(missed_messages)
+  end
+end
 
 ## License
 
