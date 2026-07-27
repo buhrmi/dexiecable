@@ -67,10 +67,11 @@ DexieCable.db = db;
 DexieCable.subscribe("UserChannel", { last_update: Date.now() });
 ```
 
-You can also set an ActionCable `consumer`. If omitted, one is created for you automatically:
+When calling `subscribe()`, DexieCable automatically creates a consumer and saves it on `DexieCable.consumer`. If you need to access the consumer earlier, you can create one yourself:
 
 ```js
-import { createConsumer } from "@rails/actioncable";
+// DexieCable ships with its own version of ActionCable (see below).
+import { createConsumer } from "dexiecable";
 
 DexieCable.consumer = createConsumer();
 ```
@@ -225,6 +226,28 @@ The JS side replays it as:
 
 ```js
 dexie.messages.where("room_id").equals(5).add({ id: 1, text: "hello" })
+```
+
+## Bundled ActionCable client
+
+DexieCable ships its own version of the ActionCable client with one key
+extension: **channel params can be functions**. When a param value is a
+function, it is called and awaited at subscribe time — useful for dynamic
+values that may change between disconnects/reconnects.
+
+```js
+import { createConsumer } from "dexiecable";
+import { getLastMessageId } from './database';
+
+const consumer = createConsumer();
+
+consumer.subscriptions.create(
+  {
+    channel: "ChatChannel",
+    room_id: 123,
+    last_message_id: getLastMessageId // evaluated fresh on each subscribe
+  }
+);
 ```
 
 ## License
