@@ -14,15 +14,13 @@ if (typeof window !== "undefined") {
 // ---------------------------------------------------------------------------
 
 const DexieCable = {
-  /** @type {import("dexie").Dexie} */
-  db: null,
-
   /** @type {import("@rails/actioncable").Consumer} */
   consumer: null,
 
   /**
    * Subscribe to a DexieCable channel.
    *
+   * @param {import("dexie").Dexie} db - Your Dexie database instance.
    * @param {string} channel - Channel class name (e.g. "UserChannel").
    * @param {Record<string, any>} [params={}] - Extra parameters sent on subscription.
    * @param {object} [callbacks={}] - ActionCable lifecycle callbacks.
@@ -32,12 +30,11 @@ const DexieCable = {
    *   import DexieCable from "dexiecable";
    *   import { db } from "./db";
    *
-   *   DexieCable.db = db;
-   *   DexieCable.subscribe("UserChannel", { last_update: Date.now() });
+   *   DexieCable.subscribe(db, "UserChannel", { last_update: Date.now() });
    */
-  subscribe(channel, params = {}, callbacks = {}) {
-    if (!this.db) {
-      throw new Error("[dexiecable] Set DexieCable.db before calling subscribe().");
+  subscribe(db, channel, params = {}, callbacks = {}) {
+    if (!db) {
+      throw new Error("[dexiecable] Pass a Dexie database as the first argument to subscribe().");
     }
 
     params = { channel, ...params };
@@ -51,7 +48,7 @@ const DexieCable = {
         this.reconnecting?.();
       },
       received(data) {
-        replay(DexieCable.db, data);
+        replay(db, data);
       },
       ...callbacks,
     };

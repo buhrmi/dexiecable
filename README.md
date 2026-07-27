@@ -57,14 +57,13 @@ npm install dexiecable
 yarn add dexiecable
 ```
 
-Assign your Dexie database to `DexieCable.db` and subscribe to a channel:
+Pass your Dexie database as the first argument to `subscribe()`:
 
 ```js
 import DexieCable from "dexiecable";
 import { db } from "./db";
 
-DexieCable.db = db;
-DexieCable.subscribe("UserChannel");
+DexieCable.subscribe(db, "UserChannel");
 ```
 
 DexieCable automatically creates a consumer and assigns it to `DexieCable.consumer`. If you need to access the consumer earlier in your app, you can create one yourself:
