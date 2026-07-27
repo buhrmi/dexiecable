@@ -227,7 +227,9 @@ The JS side replays it as:
 dexie.messages.where("room_id").equals(5).add({ id: 1, text: "hello" })
 ```
 
-## Syncing missed records on reconnection
+## Recipies
+
+### Syncing missed records on reconnection
 
 A common pattern to avoid data loss during transient disconnections is using sequence IDs to bridge the offline gap. When a connection drops, updates continue on the server. Sending the client’s latest known sequence ID upon reconnect allows the backend to query and stream only the records missed while offline.
 
@@ -263,6 +265,23 @@ end
 ```
 
 You might want to have look at the [Sequenced](https://github.com/derrickreimer/sequenced) gem to automatically add sequence IDs to your records.
+
+### Multi-user environments
+
+In multi-user or multi-tenant applications, you can isolate records by binding different subscription channels to separate Dexie database instances. This prevents local data leaks between user accounts and keeps private user data separate from public or shared feeds.
+
+```js
+
+import Dexie from 'dexie'
+import { subscribe } from 'dexiecable'
+
+const userDB = new Dexie("user_"+userId)
+const sharedDB = new Dexie("shared")
+
+subscribe(userDB, 'UserChannel')
+subscribe(sharedDB, 'PublicChannel')
+
+```
 
 ## License
 
