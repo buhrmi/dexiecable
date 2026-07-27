@@ -232,7 +232,7 @@ dexie.messages.where("room_id").equals(5).add({ id: 1, text: "hello" })
 
 ## Recipies
 
-### Syncing missed records on reconnection
+### Use sequence IDs to avoid data loss
 
 A common pattern to avoid data loss during transient disconnections is using sequence IDs to bridge the offline gap. When a connection drops, updates continue on the server. Sending the client’s latest known sequence ID upon reconnect allows the backend to query and stream only the records missed while offline.
 
@@ -245,11 +245,10 @@ import { subscribe } from "dexiecable";
 import { db, getLastMessageId } from './database';
 
 subscribe(db, {
-    channel: "ChatChannel",
-    room_id: 123,
-    seq_id: getLastMessageId // evaluated fresh on each reconnect
-  }
-);
+  channel: "ChatChannel",
+  room_id: 123,
+  seq_id: getLastMessageId // evaluated fresh on each reconnect
+});
 ```
 
 Send missed messages on reconnection:
