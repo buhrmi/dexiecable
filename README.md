@@ -242,12 +242,14 @@ function, it is called and awaited at subscribe time — use this to submit the 
 
 ```js
 import { subscribe } from "dexiecable";
-import { db, getLastMessageId } from './database';
+import { db, getLastSeqId } from './database';
+
+const roomId = 123;
 
 subscribe(db, {
   channel: "ChatChannel",
-  room_id: 123,
-  seq_id: getLastMessageId // evaluated fresh on each reconnect
+  room_id: roomId,
+  seq_id: () => getLastSeqId(roomId) // evaluated fresh on each reconnect
 });
 ```
 
