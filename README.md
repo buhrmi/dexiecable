@@ -263,6 +263,8 @@ class ChatChannel < ApplicationChannel:Base
 end
 ```
 
+You might want to have look at the [Sequenced](https://github.com/derrickreimer/sequenced) gem to automatically add sequence IDs to your records.
+
 ## License
 
 MIT
