@@ -330,7 +330,6 @@ class Subscription {
   constructor(consumer, params = {}, mixin) {
     this.consumer = consumer;
     this.params = params;
-    this.identifier = JSON.stringify(resolveParams(params));
     extend(this, mixin);
   }
   perform(action, data = {}) {

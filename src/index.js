@@ -1,4 +1,5 @@
-export { createConsumer } from "./actioncable.js";
+import { createConsumer } from "./actioncable.js";
+export { createConsumer }
 
 let unloading = false;
 
