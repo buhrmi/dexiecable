@@ -1,14 +1,6 @@
 import { createConsumer } from "./actioncable.js";
 export { createConsumer }
 
-let unloading = false;
-
-if (typeof window !== "undefined") {
-  window.addEventListener("beforeunload", () => {
-    unloading = true;
-  });
-}
-
 // ---------------------------------------------------------------------------
 // Module state
 // ---------------------------------------------------------------------------
@@ -52,28 +44,19 @@ export function setConsumer(c) {
  *
  *   subscribe(db, "UserChannel", { last_update: Date.now() });
  */
-export function subscribe(db, channel, params = {}, callbacks = {}) {
+export function subscribe(db, channelName, mixin) {
   if (!db) {
     throw new Error("[dexiecable] Pass a Dexie database as the first argument to subscribe().");
   }
 
-  params = { channel, ...params };
-  callbacks = {
-    connected() {
-      console.log(`[dexiecable] Connected to ${channel}`);
-    },
-    disconnected({ willAttemptReconnect }) {
-      console.log(`[dexiecable] Disconnected from ${channel}`);
-      if (!willAttemptReconnect || unloading) return;
-      this.reconnecting?.();
-    },
+  mixin = {
     received(data) {
       replay(db, data);
     },
-    ...callbacks,
+    ...mixin,
   };
 
-  return getConsumer().subscriptions.create(params, callbacks);
+  return getConsumer().subscriptions.create(channelName, mixin);
 }
 
 // ---------------------------------------------------------------------------
@@ -92,6 +75,7 @@ function replay(db, data) {
     return;
   }
 
+  // This is the entire replay magic 🤷
   for (const op of data.ops) {
     table = table[op.method](...op.params);
   }
