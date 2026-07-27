@@ -56,8 +56,8 @@ const DexieCable = {
       ...callbacks,
     };
 
-    const consumer = this.consumer || createConsumer();
-    return consumer.subscriptions.create(params, callbacks);
+    DexieCable.consumer ||= createConsumer();
+    return DexieCable.consumer.subscriptions.create(params, callbacks);
   },
 };
 

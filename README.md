@@ -245,7 +245,7 @@ consumer.subscriptions.create(
   {
     channel: "ChatChannel",
     room_id: 123,
-    last_message_id: getLastMessageId // evaluated fresh on each subscribe
+    last_message_id: getLastMessageId // evaluated fresh on each reconnect
   }
 );
 ```
