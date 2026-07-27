@@ -1,4 +1,4 @@
-import { createConsumer } from "@rails/actioncable";
+export { createConsumer } from "./actioncable.js";
 
 let unloading = false;
 
