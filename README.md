@@ -1,7 +1,7 @@
 # DexieCable
 
 > [!NOTE]
-> DexieCable is NOT a local-first solution, because it lacks the capability to automatically sync updates back to the server (this might be added later). For now, think of it as a real-time local-cache solution. Also, check out this [blog post introducing DexieCable](https://dev.to/buhrmi/real-time-rails-without-turbo-modern-reactive-uis-with-inertia-and-dexiecable-4lge) for an introduction to DexieCable.
+> DexieCable is NOT a local-first solution, because it lacks the capability to automatically sync updates back to the server (this might be added later). For now, think of it as a real-time local-cache solution. Also, check out this [blog post introducing DexieCable](https://dev.to/buhrmi/real-time-rails-without-turbo-modern-reactive-uis-with-inertia-and-dexiecable-4lge).
 
 DexieCable augments ActionCable channels with a query DSL that mirrors the Dexie.js API, letting you push database mutations from the server to the client in real time. It also gives you a [`syncs_to_dexie`](#syncs_to_dexie--automatic-model-syncing) ActiveRecord macro for automatic change syncing.
 
