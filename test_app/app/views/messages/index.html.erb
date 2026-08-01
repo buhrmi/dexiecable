@@ -1,0 +1,35 @@
+<h1>Messages</h1>
+
+<div id="messages">
+  <% @messages.each do |msg| %>
+    <p data-id="<%= msg.id %>"><%= msg.body %></p>
+  <% end %>
+</div>
+
+<script type="module">
+  import Dexie from "dexie";
+  import { subscribe } from "dexiecable";
+
+  // Set up the Dexie database
+  const db = new Dexie("TestDB");
+  db.version(1).stores({
+    messages: "id, body"
+  });
+
+  // Expose for system tests
+  window.Dexie = Dexie;
+  window.dexieDB = db;
+
+  // Subscribe to DexieCable
+  subscribe(db, { channel: "MessageChannel" });
+
+  // Display messages from IndexedDB via liveQuery
+  const messagesDiv = document.getElementById("messages");
+
+  Dexie.liveQuery(() => db.messages.toArray()).subscribe({
+    next: (messages) => {
+      messagesDiv.innerHTML = messages.map(m => `<p data-id="${m.id}">${m.body}</p>`).join("");
+    },
+    error: (err) => console.error("liveQuery error:", err)
+  });
+</script>

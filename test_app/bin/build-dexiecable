@@ -1,0 +1,12 @@
+#!/bin/bash
+# Rebuild the DexieCable JS bundle from symlinked source files using esbuild.
+# Run this after making changes to ../../src/
+set -e
+cd "$(dirname "$0")/.."
+
+ENTRY="app/assets/builds/dexiecable/index.js"
+OUTPUT="app/assets/builds/dexiecable-bundle.js"
+
+echo "Building dexiecable bundle with esbuild..."
+npx esbuild "$ENTRY" --bundle --format=esm --outfile="$OUTPUT"
+echo "Done: $OUTPUT ($(wc -c < "$OUTPUT") bytes)"

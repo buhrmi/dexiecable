@@ -1,0 +1,315 @@
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+--------------------------------------------------------------------------------------
+MessageSyncTest: test_syncs_to_dexie_pushes_created_record_to_frontend_via_ActionCable
+--------------------------------------------------------------------------------------
+Started GET "/" for 127.0.0.1 at 2026-08-01 19:00:58 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.6ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 3.7ms | GC: 0.0ms)
+Completed 200 OK in 31ms (Views: 6.2ms | ActiveRecord: 0.1ms (1 query, 0 cached) | GC: 0.0ms)
+Started GET "/favicon.ico" for 127.0.0.1 at 2026-08-01 19:00:58 +0700
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.2ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Hello from DexieCable!"], ["created_at", "2026-08-01 12:00:58.691502"], ["updated_at", "2026-08-01 12:00:58.691502"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to message:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-08-01T12:00:58.691Z", "updated_at" => "2026-08-01T12:00:58.691Z"}]}]}
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+--------------------------------------------------------------------------------------
+MessageSyncTest: test_syncs_to_dexie_pushes_created_record_to_frontend_via_ActionCable
+--------------------------------------------------------------------------------------
+Started GET "/" for 127.0.0.1 at 2026-08-01 19:01:51 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.6ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 2.6ms | GC: 0.0ms)
+Completed 200 OK in 27ms (Views: 5.0ms | ActiveRecord: 0.1ms (1 query, 0 cached) | GC: 0.0ms)
+Started GET "/favicon.ico" for 127.0.0.1 at 2026-08-01 19:01:51 +0700
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.3ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Hello from DexieCable!"], ["created_at", "2026-08-01 12:01:51.337791"], ["updated_at", "2026-08-01 12:01:51.337791"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to message:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-08-01T12:01:51.337Z", "updated_at" => "2026-08-01T12:01:51.337Z"}]}]}
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.7ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+--------------------------------------------------------------------------------------
+MessageSyncTest: test_syncs_to_dexie_pushes_created_record_to_frontend_via_ActionCable
+--------------------------------------------------------------------------------------
+Started GET "/" for 127.0.0.1 at 2026-08-01 19:02:41 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.6ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 3.6ms | GC: 0.0ms)
+Completed 200 OK in 30ms (Views: 6.4ms | ActiveRecord: 0.1ms (1 query, 0 cached) | GC: 0.0ms)
+Started GET "/favicon.ico" for 127.0.0.1 at 2026-08-01 19:02:41 +0700
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.2ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Hello from DexieCable!"], ["created_at", "2026-08-01 12:02:41.279117"], ["updated_at", "2026-08-01 12:02:41.279117"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to message:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-08-01T12:02:41.279Z", "updated_at" => "2026-08-01T12:02:41.279Z"}]}]}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+Started GET "/" for 127.0.0.1 at 2026-08-01 19:07:48 +0700
+Processing by MessagesController#index as */*
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (1.8ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 4.5ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 5.6ms | GC: 0.0ms)
+Completed 200 OK in 44ms (Views: 5.4ms | ActiveRecord: 3.0ms (1 query, 0 cached) | GC: 0.1ms)
+Started GET "/" for 127.0.0.1 at 2026-08-01 19:08:48 +0700
+Processing by MessagesController#index as */*
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (1.6ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 4.8ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 7.5ms | GC: 0.0ms)
+Completed 200 OK in 48ms (Views: 8.1ms | ActiveRecord: 2.7ms (1 query, 0 cached) | GC: 0.3ms)
+Started GET "/" for 127.0.0.1 at 2026-08-01 19:09:17 +0700
+Processing by MessagesController#index as */*
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (1.7ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 4.0ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 7.6ms | GC: 0.0ms)
+Completed 200 OK in 43ms (Views: 7.5ms | ActiveRecord: 2.8ms (1 query, 0 cached) | GC: 0.4ms)
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.8ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+--------------------------------------------------------------------------------------
+MessageSyncTest: test_syncs_to_dexie_pushes_created_record_to_frontend_via_ActionCable
+--------------------------------------------------------------------------------------
+Started GET "/" for 127.0.0.1 at 2026-08-01 19:09:34 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.8ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 4.1ms | GC: 0.0ms)
+Completed 200 OK in 34ms (Views: 7.0ms | ActiveRecord: 0.1ms (1 query, 0 cached) | GC: 0.0ms)
+Started GET "/favicon.ico" for 127.0.0.1 at 2026-08-01 19:09:34 +0700
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.5ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Hello from DexieCable!"], ["created_at", "2026-08-01 12:09:34.355728"], ["updated_at", "2026-08-01 12:09:34.355728"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to message:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-08-01T12:09:34.355Z", "updated_at" => "2026-08-01T12:09:34.355Z"}]}]}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.6ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+--------------------------------------------------------------------------------------
+MessageSyncTest: test_syncs_to_dexie_pushes_created_record_to_frontend_via_ActionCable
+--------------------------------------------------------------------------------------
+Started GET "/" for 127.0.0.1 at 2026-08-01 19:11:05 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.7ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 3.7ms | GC: 0.0ms)
+Completed 200 OK in 29ms (Views: 6.7ms | ActiveRecord: 0.1ms (1 query, 0 cached) | GC: 0.0ms)
+Started GET "/favicon.ico" for 127.0.0.1 at 2026-08-01 19:11:06 +0700
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.2ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Hello from DexieCable!"], ["created_at", "2026-08-01 12:11:06.087092"], ["updated_at", "2026-08-01 12:11:06.087092"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to message:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-08-01T12:11:06.087Z", "updated_at" => "2026-08-01T12:11:06.087Z"}]}]}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+Started GET "/" for 127.0.0.1 at 2026-08-01 19:11:30 +0700
+Processing by MessagesController#index as */*
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (1.9ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 4.6ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 7.6ms | GC: 0.0ms)
+Completed 200 OK in 43ms (Views: 7.4ms | ActiveRecord: 3.1ms (1 query, 0 cached) | GC: 0.4ms)
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+--------------------------------------------------------------------------------------
+MessageSyncTest: test_syncs_to_dexie_pushes_created_record_to_frontend_via_ActionCable
+--------------------------------------------------------------------------------------
+Started GET "/" for 127.0.0.1 at 2026-08-01 19:12:37 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.9ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 3.9ms | GC: 0.0ms)
+Completed 200 OK in 33ms (Views: 6.8ms | ActiveRecord: 0.1ms (1 query, 0 cached) | GC: 0.0ms)
+Started GET "/favicon.ico" for 127.0.0.1 at 2026-08-01 19:12:38 +0700
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.3ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Hello from DexieCable!"], ["created_at", "2026-08-01 12:12:38.732072"], ["updated_at", "2026-08-01 12:12:38.732072"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to message:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-08-01T12:12:38.732Z", "updated_at" => "2026-08-01T12:12:38.732Z"}]}]}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (1.1ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+--------------------------------------------------------------------------------------
+MessageSyncTest: test_syncs_to_dexie_pushes_created_record_to_frontend_via_ActionCable
+--------------------------------------------------------------------------------------
+Started GET "/" for 127.0.0.1 at 2026-08-01 19:13:13 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.7ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 3.1ms | GC: 0.0ms)
+Completed 200 OK in 30ms (Views: 5.5ms | ActiveRecord: 0.1ms (1 query, 0 cached) | GC: 0.0ms)
+Started GET "/cable" for 127.0.0.1 at 2026-08-01 19:13:15 +0700
+Started GET "/cable" [WebSocket] for 127.0.0.1 at 2026-08-01 19:13:15 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+Started GET "/favicon.ico" for 127.0.0.1 at 2026-08-01 19:13:15 +0700
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+MessageChannel is transmitting the subscription confirmation
+MessageChannel is streaming from message_channel
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.2ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Hello from DexieCable!"], ["created_at", "2026-08-01 12:13:15.135399"], ["updated_at", "2026-08-01 12:13:15.135399"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to message:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-08-01T12:13:15.135Z", "updated_at" => "2026-08-01T12:13:15.135Z"}]}]}
+Finished "/cable" [WebSocket] for 127.0.0.1 at 2026-08-01 19:13:25 +0700
+MessageChannel stopped streaming from message_channel
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+--------------------------------------------------------------------------------------
+MessageSyncTest: test_syncs_to_dexie_pushes_created_record_to_frontend_via_ActionCable
+--------------------------------------------------------------------------------------
+Started GET "/" for 127.0.0.1 at 2026-08-01 19:14:39 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.7ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 3.2ms | GC: 0.0ms)
+Completed 200 OK in 29ms (Views: 5.8ms | ActiveRecord: 0.1ms (1 query, 0 cached) | GC: 0.0ms)
+Started GET "/cable" for 127.0.0.1 at 2026-08-01 19:14:41 +0700
+Started GET "/cable" [WebSocket] for 127.0.0.1 at 2026-08-01 19:14:41 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+Started GET "/favicon.ico" for 127.0.0.1 at 2026-08-01 19:14:41 +0700
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+MessageChannel is transmitting the subscription confirmation
+MessageChannel is streaming from message:message_channel
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.6ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Hello from DexieCable!"], ["created_at", "2026-08-01 12:14:41.206631"], ["updated_at", "2026-08-01 12:14:41.206631"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to message:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-08-01T12:14:41.206Z", "updated_at" => "2026-08-01T12:14:41.206Z"}]}]}
+MessageChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-08-01T12:14:41.206Z", "updated_at" => "2026-08-01T12:14:41.206Z"}]}]} (via streamed from message:message_channel)
+Finished "/cable" [WebSocket] for 127.0.0.1 at 2026-08-01 19:14:41 +0700
+MessageChannel stopped streaming from message:message_channel
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.6ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+--------------------------------------------------------------------------------------
+MessageSyncTest: test_syncs_to_dexie_pushes_created_record_to_frontend_via_ActionCable
+--------------------------------------------------------------------------------------
+Started GET "/" for 127.0.0.1 at 2026-08-01 19:17:02 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.7ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 3.8ms | GC: 0.0ms)
+Completed 200 OK in 32ms (Views: 6.7ms | ActiveRecord: 0.1ms (1 query, 0 cached) | GC: 0.0ms)
+Started GET "/cable" for 127.0.0.1 at 2026-08-01 19:17:03 +0700
+Started GET "/cable" [WebSocket] for 127.0.0.1 at 2026-08-01 19:17:03 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+Started GET "/favicon.ico" for 127.0.0.1 at 2026-08-01 19:17:03 +0700
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+MessageChannel is transmitting the subscription confirmation
+MessageChannel is streaming from message:message_channel
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.3ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Hello from DexieCable!"], ["created_at", "2026-08-01 12:17:03.580286"], ["updated_at", "2026-08-01 12:17:03.580286"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to message:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-08-01T12:17:03.580Z", "updated_at" => "2026-08-01T12:17:03.580Z"}]}]}
+MessageChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-08-01T12:17:03.580Z", "updated_at" => "2026-08-01T12:17:03.580Z"}]}]} (via streamed from message:message_channel)
+Finished "/cable" [WebSocket] for 127.0.0.1 at 2026-08-01 19:17:03 +0700
+MessageChannel stopped streaming from message:message_channel
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.8ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+--------------------------------------------------------------------------------------
+MessageSyncTest: test_syncs_to_dexie_pushes_created_record_to_frontend_via_ActionCable
+--------------------------------------------------------------------------------------
+Started GET "/" for 127.0.0.1 at 2026-08-01 19:21:36 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.2ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.9ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 3.8ms | GC: 0.0ms)
+Completed 200 OK in 38ms (Views: 6.8ms | ActiveRecord: 0.1ms (1 query, 0 cached) | GC: 0.0ms)
+Started GET "/cable" for 127.0.0.1 at 2026-08-01 19:21:37 +0700
+Started GET "/cable" [WebSocket] for 127.0.0.1 at 2026-08-01 19:21:37 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+Started GET "/favicon.ico" for 127.0.0.1 at 2026-08-01 19:21:37 +0700
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+MessageChannel is transmitting the subscription confirmation
+MessageChannel is streaming from message:message_channel
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (1.0ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Hello from DexieCable!"], ["created_at", "2026-08-01 12:21:37.787267"], ["updated_at", "2026-08-01 12:21:37.787267"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to message:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-08-01T12:21:37.787Z", "updated_at" => "2026-08-01T12:21:37.787Z"}]}]}
+MessageChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-08-01T12:21:37.787Z", "updated_at" => "2026-08-01T12:21:37.787Z"}]}]} (via streamed from message:message_channel)
+Finished "/cable" [WebSocket] for 127.0.0.1 at 2026-08-01 19:21:37 +0700
+MessageChannel stopped streaming from message:message_channel
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m

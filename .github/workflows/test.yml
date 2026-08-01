@@ -1,0 +1,54 @@
+name: Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  system_test:
+    runs-on: ubuntu-latest
+
+    services:
+      selenium:
+        image: selenium/standalone-chrome:latest
+        options: --shm-size=2g
+        ports:
+          - 4444:4444
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+          working-directory: test_app
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: test_app/package-lock.json
+
+      - name: Install npm dependencies
+        working-directory: test_app
+        run: npm ci
+
+      - name: Build dexiecable JS bundle
+        working-directory: test_app
+        run: bin/build-dexiecable
+
+      - name: Prepare test database
+        working-directory: test_app
+        run: bin/rails db:test:prepare
+
+      - name: Run system tests
+        working-directory: test_app
+        run: bin/rails test test/system
+        env:
+          CI: "true"
+          SELENIUM_REMOTE_URL: "http://localhost:4444/wd/hub"
