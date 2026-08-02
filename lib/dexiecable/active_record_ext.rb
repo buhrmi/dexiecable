@@ -30,16 +30,19 @@ module DexieCable
       #                 evaluated in the record's context.
       # @param only    [Array<Symbol>] Limit which lifecycle events sync.
       #                 Default: [:create, :update, :destroy].
+      # @param with [Symbol, Proc] Method name or proc to use for
+      #                 serializing records (defaults to :as_json_for_dexie).
       # @param if      [Symbol, Proc] Only sync if the given method or proc
       #                 returns truthy (evaluated in the record's context).
       # @param unless  [Symbol, Proc] Skip sync if the given method or proc
       #                 returns truthy (evaluated in the record's context).
-      def syncs_to_dexie(via:, to: nil, table: nil, only: nil, **options)
+      def syncs_to_dexie(via:, to: nil, table: nil, only: nil, with: nil, **options)
         events     = Array(only || %i[create update destroy])
         conditions = options.slice(:if, :unless)
+        serializer = with || :as_json_for_dexie
 
         @dexie_sync_configs ||= []
-        @dexie_sync_configs << { via: via, to: to, table: table, only: events, **conditions }
+        @dexie_sync_configs << { via: via, to: to, table: table, only: events, with: serializer, **conditions }
 
         if events.include?(:destroy)
           before_destroy :dexie_sync_before_destroy
@@ -56,7 +59,7 @@ module DexieCable
           after_commit on: :create, **conditions do
             Array(resolve_channel(via, to)).each do |channel|
               next unless channel
-              channel.table(resolve_table(table)).add(as_json_for_dexie)
+              channel.table(resolve_table(table)).add(serialize_record(serializer))
             end
           end
         end
@@ -66,7 +69,7 @@ module DexieCable
             Array(resolve_channel(via, to)).each do |channel|
               next unless channel
 
-              changes = as_json_for_dexie.slice(*saved_changes.keys)
+              changes = serialize_record(serializer).slice(*saved_changes.keys)
               channel.table(resolve_table(table)).update(id, changes)
             end
           end
@@ -98,6 +101,14 @@ module DexieCable
       when Proc   then instance_exec(&table).to_s
       when nil    then self.class.table_name
       else table.to_s
+      end
+    end
+
+    def serialize_record(serializer)
+      case serializer
+      when Proc   then instance_exec(&serializer)
+      when Symbol then send(serializer)
+      else serializer
       end
     end
 

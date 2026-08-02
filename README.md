@@ -165,6 +165,7 @@ Internally, `syncs_to_dexie` sets up the following ActiveRecord callbacks:
 | `to:` | *(none)* | The stream target passed to `broadcast_to`. Symbol → calls `send`. String → used as-is. Proc → evaluated in record context. Returns a single recipient or collection. |
 | `table:` | model's `table_name` | Override the Dexie table name. A Proc is evaluated in the record's context. |
 | `only:` | `[:create, :update, :destroy]` | Limit which events trigger a sync |
+| `with:` | `:as_json_for_dexie` | Method name (Symbol) or Proc for serializing records |
 | `if:` | *(none)* | Symbol (method name) or Proc — only sync when it returns truthy |
 | `unless:` | *(none)* | Symbol (method name) or Proc — skip sync when it returns truthy |
 
@@ -182,15 +183,28 @@ end
 
 #### Customizing the synced payload
 
-Override `as_json_for_dexie` in your model:
+Override `as_json_for_dexie` in your model, or use the `with` option to specify a different method or Proc:
 
 ```ruby
 class Message < ApplicationRecord
+  # Using the default as_json_for_dexie override:
   syncs_to_dexie via: UserChannel, to: :sender
 
   def as_json_for_dexie
     super.merge(room_name: room.name)
   end
+
+  # Or use a custom serializer method:
+  syncs_to_dexie via: AdminChannel, to: :admin,
+                 with: :admin_payload
+
+  def admin_payload
+    attributes.slice("id", "body", "flagged")
+  end
+
+  # Or a Proc:
+  syncs_to_dexie via: PublicChannel,
+                 with: -> { { id: id, summary: body.truncate(100) } }
 end
 ```
 

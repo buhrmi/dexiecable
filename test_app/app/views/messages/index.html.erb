@@ -6,6 +6,9 @@
   <% end %>
 </div>
 
+<div id="custom-messages"></div>
+<div id="proc-messages"></div>
+
 <script type="module">
   import Dexie from "dexie";
   import { subscribe } from "dexiecable";
@@ -13,7 +16,9 @@
   // Set up the Dexie database
   const db = new Dexie("TestDB");
   db.version(1).stores({
-    messages: "id, body"
+    messages: "id, body",
+    custom_messages: "id, body",
+    proc_messages: "id, body"
   });
 
   // Expose for system tests
@@ -25,10 +30,26 @@
 
   // Display messages from IndexedDB via liveQuery
   const messagesDiv = document.getElementById("messages");
+  const customDiv = document.getElementById("custom-messages");
+  const procDiv = document.getElementById("proc-messages");
 
   Dexie.liveQuery(() => db.messages.toArray()).subscribe({
     next: (messages) => {
       messagesDiv.innerHTML = messages.map(m => `<p data-id="${m.id}">${m.body}</p>`).join("");
+    },
+    error: (err) => console.error("liveQuery error:", err)
+  });
+
+  Dexie.liveQuery(() => db.custom_messages.toArray()).subscribe({
+    next: (messages) => {
+      customDiv.innerHTML = messages.map(m => `<p class="custom" data-id="${m.id}">${m.body}</p>`).join("");
+    },
+    error: (err) => console.error("liveQuery error:", err)
+  });
+
+  Dexie.liveQuery(() => db.proc_messages.toArray()).subscribe({
+    next: (messages) => {
+      procDiv.innerHTML = messages.map(m => `<p class="proc" data-id="${m.id}">${m.body}</p>`).join("");
     },
     error: (err) => console.error("liveQuery error:", err)
   });
