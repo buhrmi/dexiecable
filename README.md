@@ -249,7 +249,7 @@ dexie.messages.where("room_id").equals(5).add({ id: 1, text: "hello" })
 
 ### Use sequence IDs to avoid data loss
 
-A common pattern to avoid data loss during transient disconnections is using sequence IDs to bridge the offline gap. When a connection drops, updates continue on the server. Sending the client’s latest known sequence ID upon reconnect allows the backend to query and stream only the records missed while offline.
+A common pattern to avoid data loss during transient disconnections is using sequence IDs to bridge the offline gap and detect gaps in transmitted records. When a connection drops, updates continue on the server. Sending the client’s latest known sequence ID upon reconnect allows the backend to query and stream only the records missed while offline.
 
 To enable this, DexieCable ships its own version of the ActionCable client with one key
 extension: **channel params can be functions**. When a param value is a
@@ -280,7 +280,7 @@ class RoomChannel < ApplicationChannel:Base
 end
 ```
 
-You might want to have look at the [Sequenced](https://github.com/derrickreimer/sequenced) gem to automatically add sequence IDs to your records.
+To add Sequence IDs, you might want to have look at the [Sequenced](https://github.com/derrickreimer/sequenced). Another option is to use [AnyCable](https://docs.anycable.io/rails/getting_started) since it guarantees deliveries of ActionCable messages.
 
 ### Multi-user environments
 
