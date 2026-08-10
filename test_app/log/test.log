@@ -597,3 +597,108 @@ MessageChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => 
 Finished "/cable" [WebSocket] for 127.0.0.1 at 2026-08-02 11:24:14 +0700
 MessageChannel stopped streaming from message:message_channel
   [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+----------------------------------------------------------------------
+MessageSyncTest: test_with:_Proc_uses_the_proc_to_serialize_the_record
+----------------------------------------------------------------------
+  [1m[36mMessage Delete All (0.1ms)[0m  [1m[31mDELETE FROM "messages"[0m
+Started GET "/" for 127.0.0.1 at 2026-08-10 17:44:53 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.7ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 3.6ms | GC: 0.3ms)
+Completed 200 OK in 23ms (Views: 6.8ms | ActiveRecord: 0.1ms (1 query, 0 cached) | GC: 1.2ms)
+Started GET "/cable" for 127.0.0.1 at 2026-08-10 17:44:54 +0700
+Started GET "/cable" [WebSocket] for 127.0.0.1 at 2026-08-10 17:44:54 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+Started GET "/favicon.ico" for 127.0.0.1 at 2026-08-10 17:44:54 +0700
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+MessageChannel is transmitting the subscription confirmation
+MessageChannel is streaming from message:message_channel
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (1.4ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Proc serialized"], ["created_at", "2026-08-10 10:44:54.175018"], ["updated_at", "2026-08-10 10:44:54.175018"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to message:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Proc serialized", "created_at" => "2026-08-10T10:44:54.175Z", "updated_at" => "2026-08-10T10:44:54.175Z"}]}]}
+[ActionCable] Broadcasting to message:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "Proc serialized [symbol]"}]}]}
+[ActionCable] Broadcasting to message:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "Proc serialized [proc]"}]}]}
+MessageChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [symbol]"}]}]} (via streamed from message:message_channel)
+MessageChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized", "created_at" => "2026-08-10T10:44:54.175Z", "updated_at" => "2026-08-10T10:44:54.175Z"}]}]} (via streamed from message:message_channel)
+MessageChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [proc]"}]}]} (via streamed from message:message_channel)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+--------------------------------------------------------------------------------
+MessageSyncTest: test_with:_Symbol_uses_the_named_method_to_serialize_the_record
+--------------------------------------------------------------------------------
+  [1m[36mMessage Delete All (0.0ms)[0m  [1m[31mDELETE FROM "messages"[0m
+Started GET "/" for 127.0.0.1 at 2026-08-10 17:44:54 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.6ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.0ms | GC: 0.0ms)
+Completed 200 OK in 2ms (Views: 1.2ms | ActiveRecord: 0.1ms (1 query, 0 cached) | GC: 0.0ms)
+Started GET "/cable" for 127.0.0.1 at 2026-08-10 17:44:54 +0700
+Started GET "/cable" [WebSocket] for 127.0.0.1 at 2026-08-10 17:44:54 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+MessageChannel is transmitting the subscription confirmation
+MessageChannel is streaming from message:message_channel
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.3ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Symbol serialized"], ["created_at", "2026-08-10 10:44:54.347678"], ["updated_at", "2026-08-10 10:44:54.347678"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to message:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Symbol serialized", "created_at" => "2026-08-10T10:44:54.347Z", "updated_at" => "2026-08-10T10:44:54.347Z"}]}]}
+[ActionCable] Broadcasting to message:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "Symbol serialized [symbol]"}]}]}
+[ActionCable] Broadcasting to message:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "Symbol serialized [proc]"}]}]}
+MessageChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized [symbol]"}]}]} (via streamed from message:message_channel)
+MessageChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized [proc]"}]}]} (via streamed from message:message_channel)
+MessageChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized [proc]"}]}]} (via streamed from message:message_channel)
+MessageChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized", "created_at" => "2026-08-10T10:44:54.347Z", "updated_at" => "2026-08-10T10:44:54.347Z"}]}]} (via streamed from message:message_channel)
+MessageChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized", "created_at" => "2026-08-10T10:44:54.347Z", "updated_at" => "2026-08-10T10:44:54.347Z"}]}]} (via streamed from message:message_channel)
+MessageChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized [symbol]"}]}]} (via streamed from message:message_channel)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+----------------------------------------------------------------------------------------
+MessageSyncTest: test_streams_to_dexie_pushes_created_record_to_frontend_via_ActionCable
+----------------------------------------------------------------------------------------
+  [1m[36mMessage Delete All (0.0ms)[0m  [1m[31mDELETE FROM "messages"[0m
+Started GET "/" for 127.0.0.1 at 2026-08-10 17:44:54 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.6ms | GC: 0.0ms)
+Completed 200 OK in 1ms (Views: 0.8ms | ActiveRecord: 0.0ms (1 query, 0 cached) | GC: 0.0ms)
+Started GET "/cable" for 127.0.0.1 at 2026-08-10 17:44:54 +0700
+Started GET "/cable" [WebSocket] for 127.0.0.1 at 2026-08-10 17:44:54 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+MessageChannel is transmitting the subscription confirmation
+MessageChannel is streaming from message:message_channel
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.3ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Hello from DexieCable!"], ["created_at", "2026-08-10 10:44:54.507549"], ["updated_at", "2026-08-10 10:44:54.507549"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to message:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-08-10T10:44:54.507Z", "updated_at" => "2026-08-10T10:44:54.507Z"}]}]}
+[ActionCable] Broadcasting to message:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "Hello from DexieCable! [symbol]"}]}]}
+[ActionCable] Broadcasting to message:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "Hello from DexieCable! [proc]"}]}]}
+MessageChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [symbol]"}]}]} (via streamed from message:message_channel)
+MessageChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [symbol]"}]}]} (via streamed from message:message_channel)
+MessageChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [symbol]"}]}]} (via streamed from message:message_channel)
+MessageChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [proc]"}]}]} (via streamed from message:message_channel)
+MessageChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [proc]"}]}]} (via streamed from message:message_channel)
+MessageChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [proc]"}]}]} (via streamed from message:message_channel)
+MessageChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-08-10T10:44:54.507Z", "updated_at" => "2026-08-10T10:44:54.507Z"}]}]} (via streamed from message:message_channel)
+MessageChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-08-10T10:44:54.507Z", "updated_at" => "2026-08-10T10:44:54.507Z"}]}]} (via streamed from message:message_channel)
+MessageChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-08-10T10:44:54.507Z", "updated_at" => "2026-08-10T10:44:54.507Z"}]}]} (via streamed from message:message_channel)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+Finished "/cable" [WebSocket] for 127.0.0.1 at 2026-08-10 17:44:54 +0700
+MessageChannel stopped streaming from message:message_channel
+Finished "/cable" [WebSocket] for 127.0.0.1 at 2026-08-10 17:44:54 +0700
+MessageChannel stopped streaming from message:message_channel
+Finished "/cable" [WebSocket] for 127.0.0.1 at 2026-08-10 17:44:54 +0700
+MessageChannel stopped streaming from message:message_channel
