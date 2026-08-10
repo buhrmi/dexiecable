@@ -9,10 +9,10 @@ module DexieCable
       # DexieCable channel.
       #
       #   class Message < ApplicationRecord
-      #     syncs_to_dexie via: UserChannel, to: :sender
-      #     syncs_to_dexie via: UserChannel, to: "global_feed"
-      #     syncs_to_dexie via: UserChannel, to: -> { conversation.users }
-      #     syncs_to_dexie via: PublicChannel
+      #     streams_to_dexie via: UserChannel, to: :sender
+      #     streams_to_dexie via: UserChannel, to: "global_feed"
+      #     streams_to_dexie via: UserChannel, to: -> { conversation.users }
+      #     streams_to_dexie via: PublicChannel
       #   end
       #
       # @param via     [Class] A DexieCable channel class. When +to+
@@ -36,7 +36,7 @@ module DexieCable
       #                 returns truthy (evaluated in the record's context).
       # @param unless  [Symbol, Proc] Skip sync if the given method or proc
       #                 returns truthy (evaluated in the record's context).
-      def syncs_to_dexie(via:, to: nil, table: nil, only: nil, with: nil, **options)
+      def streams_to_dexie(via:, to: nil, table: nil, only: nil, with: nil, **options)
         events     = Array(only || %i[create update destroy])
         conditions = options.slice(:if, :unless)
         serializer = with || :as_json_for_dexie

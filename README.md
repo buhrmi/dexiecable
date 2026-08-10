@@ -3,7 +3,7 @@
 > [!NOTE]
 > DexieCable is NOT a local-first solution, because it lacks the capability to automatically sync updates back to the server (this might be added later). For now, think of it as a real-time local-cache solution. Also, check out this [blog post introducing DexieCable](https://dev.to/buhrmi/real-time-rails-without-turbo-modern-reactive-uis-with-inertia-and-dexiecable-4lge).
 
-DexieCable augments ActionCable channels with a query DSL that mirrors the Dexie.js API, letting you push database mutations from the server to the client in real time. It also gives you a [`syncs_to_dexie`](#syncs_to_dexie--automatic-model-syncing) ActiveRecord macro for automatic change syncing.
+DexieCable augments ActionCable channels with a query DSL that mirrors the Dexie.js API, letting you push database mutations from the server to the client in real time. It also gives you a [`streams_to_dexie`](#streams_to_dexie--automatic-model-syncing) ActiveRecord macro for automatic change syncing.
 
 You can run any Dexie table update directly inside a channel:
 
@@ -30,11 +30,11 @@ class NotificationsController < ApplicationController
 end
 ```
 
-An even more convenient way is to use the `syncs_to_dexie` macro (more info [below](#syncs_to_dexie--automatic-model-syncing))
+An even more convenient way is to use the `streams_to_dexie` macro (more info [below](#streams_to_dexie--automatic-model-syncing))
 
 ```ruby
 class Notification < ApplicationRecord
-  syncs_to_dexie via: UserChannel, to: :user
+  streams_to_dexie via: UserChannel, to: :user
 end
 ```
 
@@ -48,7 +48,7 @@ Add to your `Gemfile`:
 gem "dexiecable"
 ```
 
-Then `bundle install`. The Railtie automatically extends `ActiveRecord::Base` with `syncs_to_dexie`.
+Then `bundle install`. The Railtie automatically extends `ActiveRecord::Base` with `streams_to_dexie`.
 
 ### npm package
 
@@ -131,25 +131,25 @@ UserChannel[current_user]
 
 The full query chain is serialized as JSON and sent over ActionCable. The JS client replays every method call against the local Dexie database in order.
 
-### `syncs_to_dexie` — automatic model syncing
+### `streams_to_dexie` — automatic model syncing
 
 Add to any ActiveRecord model. Just provide the channel class and the broadcast target.
 
 ```ruby
 class Message < ApplicationRecord
   # Calls send(:receiver), then broadcasts: UserChannel.broadcast_to(receiver, ...)
-  syncs_to_dexie via: UserChannel, to: :receiver
+  streams_to_dexie via: UserChannel, to: :receiver
 
   # String used directly: UserChannel.broadcast_to("global_feed", ...)
-  syncs_to_dexie via: UserChannel, to: "global_feed"
+  streams_to_dexie via: UserChannel, to: "global_feed"
 
   # Procs are also supported. If an array is returned, multiple broadcasts are made
   # conversation.users.each { |u| UserChannel.broadcast_to(u, ...) }
-  syncs_to_dexie via: UserChannel, to: -> { conversation.users }
+  streams_to_dexie via: UserChannel, to: -> { conversation.users }
 end
 ```
 
-Internally, `syncs_to_dexie` sets up the following ActiveRecord callbacks:
+Internally, `streams_to_dexie` sets up the following ActiveRecord callbacks:
 
 | Event | Action |
 |---|---|
@@ -169,14 +169,14 @@ Internally, `syncs_to_dexie` sets up the following ActiveRecord callbacks:
 | `if:` | *(none)* | Symbol (method name) or Proc — only sync when it returns truthy |
 | `unless:` | *(none)* | Symbol (method name) or Proc — skip sync when it returns truthy |
 
-You can combine multiple `syncs_to_dexie` declarations, each with different conditions:
+You can combine multiple `streams_to_dexie` declarations, each with different conditions:
 
 ```ruby
 class Message < ApplicationRecord
-  syncs_to_dexie via: UserChannel, to: -> { sender },
+  streams_to_dexie via: UserChannel, to: -> { sender },
                  if: :published?
 
-  syncs_to_dexie via: AdminChannel,
+  streams_to_dexie via: AdminChannel,
                  unless: -> { draft? }
 end
 ```
@@ -188,14 +188,14 @@ Override `as_json_for_dexie` in your model, or use the `with` option to specify 
 ```ruby
 class Message < ApplicationRecord
   # Using the default as_json_for_dexie override:
-  syncs_to_dexie via: UserChannel, to: :sender
+  streams_to_dexie via: UserChannel, to: :sender
 
   def as_json_for_dexie
     super.merge(room_name: room.name)
   end
 
   # Or use a custom serializer method:
-  syncs_to_dexie via: AdminChannel, to: :admin,
+  streams_to_dexie via: AdminChannel, to: :admin,
                  with: :admin_payload
 
   def admin_payload
@@ -203,7 +203,7 @@ class Message < ApplicationRecord
   end
 
   # Or a Proc:
-  syncs_to_dexie via: PublicChannel,
+  streams_to_dexie via: PublicChannel,
                  with: -> { { id: id, summary: body.truncate(100) } }
 end
 ```

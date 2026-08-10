@@ -9,7 +9,7 @@ class MessageSyncTest < ApplicationSystemTestCase
     page.execute_script("window.dexieDB.tables.forEach(t => t.clear())")
   end
 
-  test "syncs_to_dexie pushes created record to frontend via ActionCable" do
+  test "streams_to_dexie pushes created record to frontend via ActionCable" do
     Message.create!(body: "Hello from DexieCable!")
 
     assert_selector "#messages p[data-id]", text: "Hello from DexieCable!", wait: 10

@@ -4,7 +4,7 @@
   [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
   [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
 --------------------------------------------------------------------------------------
-MessageSyncTest: test_syncs_to_dexie_pushes_created_record_to_frontend_via_ActionCable
+MessageSyncTest: test_streams_to_dexie_pushes_created_record_to_frontend_via_ActionCable
 --------------------------------------------------------------------------------------
 Started GET "/" for 127.0.0.1 at 2026-08-01 19:00:58 +0700
 Processing by MessagesController#index as HTML
@@ -29,7 +29,7 @@ ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
   [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
   [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
 --------------------------------------------------------------------------------------
-MessageSyncTest: test_syncs_to_dexie_pushes_created_record_to_frontend_via_ActionCable
+MessageSyncTest: test_streams_to_dexie_pushes_created_record_to_frontend_via_ActionCable
 --------------------------------------------------------------------------------------
 Started GET "/" for 127.0.0.1 at 2026-08-01 19:01:51 +0700
 Processing by MessagesController#index as HTML
@@ -54,7 +54,7 @@ ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
   [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
   [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
 --------------------------------------------------------------------------------------
-MessageSyncTest: test_syncs_to_dexie_pushes_created_record_to_frontend_via_ActionCable
+MessageSyncTest: test_streams_to_dexie_pushes_created_record_to_frontend_via_ActionCable
 --------------------------------------------------------------------------------------
 Started GET "/" for 127.0.0.1 at 2026-08-01 19:02:41 +0700
 Processing by MessagesController#index as HTML
@@ -103,7 +103,7 @@ Completed 200 OK in 43ms (Views: 7.5ms | ActiveRecord: 2.8ms (1 query, 0 cached)
   [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
   [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
 --------------------------------------------------------------------------------------
-MessageSyncTest: test_syncs_to_dexie_pushes_created_record_to_frontend_via_ActionCable
+MessageSyncTest: test_streams_to_dexie_pushes_created_record_to_frontend_via_ActionCable
 --------------------------------------------------------------------------------------
 Started GET "/" for 127.0.0.1 at 2026-08-01 19:09:34 +0700
 Processing by MessagesController#index as HTML
@@ -128,7 +128,7 @@ ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
   [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
   [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
 --------------------------------------------------------------------------------------
-MessageSyncTest: test_syncs_to_dexie_pushes_created_record_to_frontend_via_ActionCable
+MessageSyncTest: test_streams_to_dexie_pushes_created_record_to_frontend_via_ActionCable
 --------------------------------------------------------------------------------------
 Started GET "/" for 127.0.0.1 at 2026-08-01 19:11:05 +0700
 Processing by MessagesController#index as HTML
@@ -161,7 +161,7 @@ Completed 200 OK in 43ms (Views: 7.4ms | ActiveRecord: 3.1ms (1 query, 0 cached)
   [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
   [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
 --------------------------------------------------------------------------------------
-MessageSyncTest: test_syncs_to_dexie_pushes_created_record_to_frontend_via_ActionCable
+MessageSyncTest: test_streams_to_dexie_pushes_created_record_to_frontend_via_ActionCable
 --------------------------------------------------------------------------------------
 Started GET "/" for 127.0.0.1 at 2026-08-01 19:12:37 +0700
 Processing by MessagesController#index as HTML
@@ -186,7 +186,7 @@ ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
   [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
   [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
 --------------------------------------------------------------------------------------
-MessageSyncTest: test_syncs_to_dexie_pushes_created_record_to_frontend_via_ActionCable
+MessageSyncTest: test_streams_to_dexie_pushes_created_record_to_frontend_via_ActionCable
 --------------------------------------------------------------------------------------
 Started GET "/" for 127.0.0.1 at 2026-08-01 19:13:13 +0700
 Processing by MessagesController#index as HTML
@@ -218,7 +218,7 @@ MessageChannel stopped streaming from message_channel
   [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
   [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
 --------------------------------------------------------------------------------------
-MessageSyncTest: test_syncs_to_dexie_pushes_created_record_to_frontend_via_ActionCable
+MessageSyncTest: test_streams_to_dexie_pushes_created_record_to_frontend_via_ActionCable
 --------------------------------------------------------------------------------------
 Started GET "/" for 127.0.0.1 at 2026-08-01 19:14:39 +0700
 Processing by MessagesController#index as HTML
@@ -253,7 +253,7 @@ MessageChannel stopped streaming from message:message_channel
   [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
   [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
 --------------------------------------------------------------------------------------
-MessageSyncTest: test_syncs_to_dexie_pushes_created_record_to_frontend_via_ActionCable
+MessageSyncTest: test_streams_to_dexie_pushes_created_record_to_frontend_via_ActionCable
 --------------------------------------------------------------------------------------
 Started GET "/" for 127.0.0.1 at 2026-08-01 19:17:02 +0700
 Processing by MessagesController#index as HTML
@@ -286,7 +286,7 @@ MessageChannel stopped streaming from message:message_channel
   [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
   [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
 --------------------------------------------------------------------------------------
-MessageSyncTest: test_syncs_to_dexie_pushes_created_record_to_frontend_via_ActionCable
+MessageSyncTest: test_streams_to_dexie_pushes_created_record_to_frontend_via_ActionCable
 --------------------------------------------------------------------------------------
 Started GET "/" for 127.0.0.1 at 2026-08-01 19:21:36 +0700
 Processing by MessagesController#index as HTML
@@ -378,7 +378,7 @@ MessageChannel stopped streaming from message:message_channel
   [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
   [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
 --------------------------------------------------------------------------------------
-MessageSyncTest: test_syncs_to_dexie_pushes_created_record_to_frontend_via_ActionCable
+MessageSyncTest: test_streams_to_dexie_pushes_created_record_to_frontend_via_ActionCable
 --------------------------------------------------------------------------------------
 Started GET "/" for 127.0.0.1 at 2026-08-02 11:22:04 +0700
 Processing by MessagesController#index as HTML
@@ -472,7 +472,7 @@ MessageChannel stopped streaming from message:message_channel
   [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
   [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
 --------------------------------------------------------------------------------------
-MessageSyncTest: test_syncs_to_dexie_pushes_created_record_to_frontend_via_ActionCable
+MessageSyncTest: test_streams_to_dexie_pushes_created_record_to_frontend_via_ActionCable
 --------------------------------------------------------------------------------------
 Started GET "/" for 127.0.0.1 at 2026-08-02 11:23:07 +0700
 Processing by MessagesController#index as HTML
@@ -539,7 +539,7 @@ MessageChannel stopped streaming from message:message_channel
   [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
   [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
 --------------------------------------------------------------------------------------
-MessageSyncTest: test_syncs_to_dexie_pushes_created_record_to_frontend_via_ActionCable
+MessageSyncTest: test_streams_to_dexie_pushes_created_record_to_frontend_via_ActionCable
 --------------------------------------------------------------------------------------
   [1m[36mMessage Delete All (0.0ms)[0m  [1m[31mDELETE FROM "messages"[0m
 Started GET "/" for 127.0.0.1 at 2026-08-02 11:24:14 +0700
