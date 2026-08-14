@@ -9,22 +9,21 @@ module DexieCable
       # DexieCable channel.
       #
       #   class Message < ApplicationRecord
-      #     streams_to_dexie via: UserChannel, to: :sender
-      #     streams_to_dexie via: UserChannel, to: "global_feed"
-      #     streams_to_dexie via: UserChannel, to: -> { conversation.users }
-      #     streams_to_dexie via: PublicChannel
+      #     streams_via UserChannel, to: :sender
+      #     streams_via UserChannel, to: "global_feed"
+      #     streams_via UserChannel, to: -> { conversation.users }
+      #     streams_via PublicChannel
       #   end
       #
-      # @param via     [Class] A DexieCable channel class. When +to+
-      #                  is given, each recipient is mapped through
-      #                  +via[to]+ to produce scoped channels.
-      #                  Without +to+, +via+ is used directly as an
-      #                  unscoped channel.
+      # @param via     [Class] A DexieCable channel class, passed as the
+      #                  first positional argument. Each recipient is
+      #                  mapped through +via[to]+ to produce scoped
+      #                  channels.
       # @param to      [Proc, Symbol, String] A Proc evaluated in record
       #                  context, a Symbol to call via +send+, or a String
       #                  used directly as the stream name for +broadcast_to+.
       #                  Must return a single recipient or collection of
-      #                  recipients.
+      #                  recipients. Defaults to the record itself.
       # @param table   [String, Symbol, Proc] Override the Dexie table name
       #                 (defaults to the model's table_name). A Proc is
       #                 evaluated in the record's context.
@@ -36,7 +35,7 @@ module DexieCable
       #                 returns truthy (evaluated in the record's context).
       # @param unless  [Symbol, Proc] Skip sync if the given method or proc
       #                 returns truthy (evaluated in the record's context).
-      def streams_to_dexie(via:, to: nil, table: nil, only: nil, with: nil, **options)
+      def streams_via(via, to: nil, table: nil, only: nil, with: nil, **options)
         events     = Array(only || %i[create update destroy])
         conditions = options.slice(:if, :unless)
         serializer = with || :as_json_for_dexie
@@ -48,7 +47,7 @@ module DexieCable
           before_destroy :dexie_sync_before_destroy
 
           after_commit on: :destroy, **conditions do
-            Array(resolve_channel(via, to)).each do |channel|
+            resolve_channels(via, to).each do |channel|
               next unless channel
               channel.table(resolve_table(table)).delete(dexie_destroy_id)
             end
@@ -57,19 +56,19 @@ module DexieCable
 
         if events.include?(:create)
           after_commit on: :create, **conditions do
-            Array(resolve_channel(via, to)).each do |channel|
+            resolve_channels(via, to).each do |channel|
               next unless channel
-              channel.table(resolve_table(table)).add(serialize_record(serializer))
+              channel.table(resolve_table(table)).add(resolve(serializer))
             end
           end
         end
 
         if events.include?(:update)
           after_commit on: :update, **conditions do
-            Array(resolve_channel(via, to)).each do |channel|
+            resolve_channels(via, to).each do |channel|
               next unless channel
 
-              changes = serialize_record(serializer).slice(*saved_changes.keys)
+              changes = resolve(serializer).slice(*saved_changes.keys)
               channel.table(resolve_table(table)).update(id, changes)
             end
           end
@@ -79,20 +78,16 @@ module DexieCable
 
     private
 
-    def resolve_channel(via, to = nil)
-      if to
-        recipients = resolve_recipient(to)
-        Array(recipients).map { |r| via[r] }
-      else
-        via
-      end
+    def resolve_channels(via, to = nil)
+      recipients = to ? resolve(to) : self
+      Array(recipients).map { |r| via[r] }
     end
 
-    def resolve_recipient(to)
-      case to
-      when Proc   then instance_exec(&to)
-      when Symbol then send(to)
-      else to
+    def resolve(val)
+      case val
+      when Proc   then instance_exec(&val)
+      when Symbol then send(val)
+      else val
       end
     end
 
@@ -101,14 +96,6 @@ module DexieCable
       when Proc   then instance_exec(&table).to_s
       when nil    then self.class.table_name
       else table.to_s
-      end
-    end
-
-    def serialize_record(serializer)
-      case serializer
-      when Proc   then instance_exec(&serializer)
-      when Symbol then send(serializer)
-      else serializer
       end
     end
 

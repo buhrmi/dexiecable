@@ -1,11 +1,11 @@
 # DexieCable
 
 > [!NOTE]
-> The current version of DexieCable is NOT a local-first solution, because it lacks the capability to automatically sync updates back to the server. For now, think of it as a real-time local-cache solution.
+> The current version of DexieCable is NOT a local-first solution, because it lacks the capability to automatically sync updates back to the server. For now, think of it more as an alternative to turbo streams that works well with component frameworks.
 >
 > Full synchronization utilizing event streams will arrive in DexieCable 2.0.
 
-DexieCable augments ActionCable channels with a query DSL that mirrors the Dexie.js API, letting you push database mutations from the server to the client in real time. It also gives you a [`streams_to_dexie`](#streams_to_dexie--automatic-model-syncing) ActiveRecord macro for automatic change syncing.
+DexieCable augments ActionCable channels with a query DSL that mirrors the Dexie.js API, letting you push database mutations from the server to the client in real time. It also gives you a [`streams_via`](#streams_via--automatic-model-syncing) ActiveRecord macro for automatic change syncing.
 
 You can run any Dexie table update directly inside a channel:
 
@@ -32,11 +32,11 @@ class NotificationsController < ApplicationController
 end
 ```
 
-An even more convenient way is to use the `streams_to_dexie` macro (more info [below](#streams_to_dexie--automatic-model-syncing))
+An even more convenient way is to use the `streams_via` macro (more info [below](#streams_via--automatic-model-syncing))
 
 ```ruby
 class Notification < ApplicationRecord
-  streams_to_dexie via: UserChannel, to: :user
+  streams_via UserChannel, to: :user
 end
 ```
 
@@ -50,7 +50,7 @@ Add to your `Gemfile`:
 gem "dexiecable"
 ```
 
-Then `bundle install`. The Railtie automatically extends `ActiveRecord::Base` with `streams_to_dexie`.
+Then `bundle install`. The Railtie automatically extends `ActiveRecord::Base` with `streams_via`.
 
 ### npm package
 
@@ -133,25 +133,25 @@ UserChannel[current_user]
 
 The full query chain is serialized as JSON and sent over ActionCable. The JS client replays every method call against the local Dexie database in order.
 
-### `streams_to_dexie` — automatic model syncing
+### `streams_via` — automatic model streaming
 
-Add to any ActiveRecord model. Just provide the channel class and the broadcast target.
+Add to any ActiveRecord model. Just provide the channel class and, optionally, the broadcast target.
 
 ```ruby
 class Message < ApplicationRecord
   # Calls send(:receiver), then broadcasts: UserChannel.broadcast_to(receiver, ...)
-  streams_to_dexie via: UserChannel, to: :receiver
+  streams_via UserChannel, to: :receiver
 
-  # String used directly: UserChannel.broadcast_to("global_feed", ...)
-  streams_to_dexie via: UserChannel, to: "global_feed"
+  # String used directly: RoomChannel.broadcast_to("public", ...)
+  streams_via RoomChannel, to: "public"
 
   # Procs are also supported. If an array is returned, multiple broadcasts are made
   # conversation.users.each { |u| UserChannel.broadcast_to(u, ...) }
-  streams_to_dexie via: UserChannel, to: -> { conversation.users }
+  streams_via UserChannel, to: -> { conversation.users }
 end
 ```
 
-Internally, `streams_to_dexie` sets up the following ActiveRecord callbacks:
+Internally, `streams_via` sets up the following ActiveRecord callbacks:
 
 | Event | Action |
 |---|---|
@@ -163,23 +163,23 @@ Internally, `streams_to_dexie` sets up the following ActiveRecord callbacks:
 
 | Option | Default | Description |
 |---|---|---|
-| `via:` | *(required)* | A DexieCable channel class |
-| `to:` | *(none)* | The stream target passed to `broadcast_to`. Symbol → calls `send`. String → used as-is. Proc → evaluated in record context. Returns a single recipient or collection. |
+| *(first argument)* | *(required)* | A DexieCable channel class |
+| `to:` | the record itself | The stream target passed to `broadcast_to`. Symbol → calls `send`. String → used as-is. Proc → evaluated in record context. Returns a single recipient or collection. |
 | `table:` | model's `table_name` | Override the Dexie table name. A Proc is evaluated in the record's context. |
 | `only:` | `[:create, :update, :destroy]` | Limit which events trigger a sync |
 | `with:` | `:as_json_for_dexie` | Method name (Symbol) or Proc for serializing records |
 | `if:` | *(none)* | Symbol (method name) or Proc — only sync when it returns truthy |
 | `unless:` | *(none)* | Symbol (method name) or Proc — skip sync when it returns truthy |
 
-You can combine multiple `streams_to_dexie` declarations, each with different conditions:
+You can combine multiple `streams_via` declarations, each with different conditions:
 
 ```ruby
 class Message < ApplicationRecord
-  streams_to_dexie via: UserChannel, to: -> { sender },
-                 if: :published?
+  streams_via UserChannel, to: -> { sender },
+              if: :published?
 
-  streams_to_dexie via: AdminChannel,
-                 unless: -> { draft? }
+  streams_via AdminChannel,
+              unless: -> { draft? }
 end
 ```
 
@@ -190,23 +190,23 @@ Override `as_json_for_dexie` in your model, or use the `with` option to specify 
 ```ruby
 class Message < ApplicationRecord
   # Using the default as_json_for_dexie override:
-  streams_to_dexie via: UserChannel, to: :sender
+  streams_via UserChannel, to: :sender
 
   def as_json_for_dexie
     super.merge(room_name: room.name)
   end
 
   # Or use a custom serializer method:
-  streams_to_dexie via: AdminChannel, to: :admin,
-                 with: :admin_payload
+  streams_via AdminChannel, to: :admin,
+             with: :admin_payload
 
   def admin_payload
     attributes.slice("id", "body", "flagged")
   end
 
   # Or a Proc:
-  streams_to_dexie via: PublicChannel,
-                 with: -> { { id: id, summary: body.truncate(100) } }
+  streams_via PublicChannel,
+             with: -> { { id: id, summary: body.truncate(100) } }
 end
 ```
 
