@@ -1,7 +1,7 @@
 # DexieCable
 
 > [!NOTE]
-> The current version of DexieCable is NOT a local-first solution, because it lacks the capability to automatically sync updates back to the server. For now, think of it more as an alternative to turbo streams that works well with component frameworks.
+> DexieCable is NOT meant to be a local-first solution. It has no automatic capability to sync updates back to the server. For now, think of it as an alternative to Turbo Streams built with component frameworks (Vue, React, Svelte, etc) in mind.
 >
 > Full synchronization utilizing event streams will arrive in DexieCable 2.0.
 
