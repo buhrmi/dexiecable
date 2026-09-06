@@ -27,3 +27,20 @@ Migrating to CreateMessages (20260801000000)
   [1m[36mActiveRecord::InternalMetadata Update (0.0ms)[0m  [1m[33mUPDATE "ar_internal_metadata" SET "value" = 'test', "updated_at" = '2026-08-01 12:00:27.950222' WHERE "ar_internal_metadata"."key" = 'environment' /*application='TestApp'*/[0m
   [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = 'schema_sha1' ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1 /*application='TestApp'*/[0m
   [1m[36mActiveRecord::InternalMetadata Create (0.0ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('schema_sha1', 'c4fb1c3bf22afed0cc705d70dc2be1435de64f47', '2026-08-01 12:00:27.950808', '2026-08-01 12:00:27.950808') RETURNING "key" /*application='TestApp'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='TestApp'*/[0m
+  [1m[36mMessage Create (0.8ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES ('x', '2026-09-06 08:09:46.816987', '2026-09-06 08:09:46.816987') RETURNING "id" /*application='TestApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='TestApp'*/[0m
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "x", "created_at" => "2026-09-06T08:09:46.816Z", "updated_at" => "2026-09-06T08:09:46.816Z"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "x [symbol]"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "x [proc]"}]}]}
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."id" = 1 LIMIT 1 /*application='TestApp'*/[0m
+  [1m[36mMessage Load (0.2ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."id" = 1 LIMIT 1 /*application='TestApp'*/[0m
+  [1m[36mCACHE Message Load (0.0ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."id" = 1 LIMIT 1[0m
+  [1m[36mMessage Load (0.0ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."id" = 999999 LIMIT 1 /*application='TestApp'*/[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mBEGIN immediate TRANSACTION /*application='TestApp'*/[0m
+  [1m[36mMessage Create (0.8ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES ('x', '2026-09-06 08:17:00.495141', '2026-09-06 08:17:00.495141') RETURNING "id" /*application='TestApp'*/[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT TRANSACTION /*application='TestApp'*/[0m
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 2, "body" => "x", "created_at" => "2026-09-06T08:17:00.495Z", "updated_at" => "2026-09-06T08:17:00.495Z"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 2, body: "x [symbol]"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 2, body: "x [proc]"}]}]}
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."id" = 2 LIMIT 1 /*application='TestApp'*/[0m

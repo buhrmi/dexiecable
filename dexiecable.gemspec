@@ -23,4 +23,5 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "actioncable", ">= 7.0"
   spec.add_dependency "activerecord", ">= 7.0"
+  spec.add_dependency "globalid", ">= 0.6"
 end

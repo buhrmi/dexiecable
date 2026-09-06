@@ -5,7 +5,7 @@
 >
 > Full synchronization utilizing event streams will arrive in DexieCable 3.0.
 
-DexieCable ships a single `DexieChannel` with a query DSL that mirrors the Dexie.js API, letting you push database mutations from the server to the client in real time. It also gives you a [`syncs_to_dexie`](#syncs_to_dexie--automatic-model-syncing) ActiveRecord macro for automatic change syncing.
+DexieCable gives your ActionCable channel a query DSL that mirrors the Dexie.js API, letting you push database mutations from the server to the client in real time. It also gives you a [`syncs_to_dexie`](#syncs_to_dexie--automatic-model-syncing) ActiveRecord macro for automatic change syncing.
 
 Push Dexie table updates to a client from anywhere on the server:
 
@@ -73,7 +73,14 @@ setConsumer(createConsumer("wss://example.com/cable"));
 
 ### DexieChannel
 
-DexieCable ships one channel — `DexieChannel` — so you never define your own channels or include anything. Every Dexie broadcast goes through it.
+Create a `DexieChannel` in your app and `include DexieCable` in it. Every Dexie broadcast goes through this channel:
+
+```ruby
+# app/channels/dexie_channel.rb
+class DexieChannel < ApplicationCable::Channel
+  include DexieCable
+end
+```
 
 Stream tokens are signed with the application secret, so a client can only subscribe to streams the server has issued for it:
 
@@ -81,11 +88,17 @@ Stream tokens are signed with the application secret, so a client can only subsc
 DexieChannel.stream_token_for(target)
 ```
 
-For an ActiveRecord model it signs the record's GlobalID:
+For an ActiveRecord model it returns a signed GlobalID (Rails' `signed_id`):
 
 ```ruby
 DexieChannel.stream_token_for(current_user)
-# => "eyJkYXRhIjoiZGV4aWVfY2FibGU6ZGV4aWVfY2hhbm5lbDpnaWQ6Ly9hcHAvVXNlci8xIn0=--signature"
+# => "signed global id"
+```
+
+Tokens never expire by default. Pass `expires_in:` or `expires_at:` to limit a token's lifetime:
+
+```ruby
+DexieChannel.stream_token_for(current_user, expires_in: 1.day)
 ```
 
 Send that token to the client (render it in a view, return it from an endpoint, etc.) and add it to the subscription:
@@ -106,6 +119,49 @@ subscription.removeStream(userStream);
 ```js
 subscription.removeAllStreams();
 ```
+
+#### Customizing DexieChannel
+
+Add custom actions or push initial data directly on your channel:
+
+```ruby
+# app/channels/dexie_channel.rb
+class DexieChannel < ApplicationCable::Channel
+  include DexieCable
+
+  # Push a snapshot when a stream is added. `record` is a record for private
+  # streams, or the stream name (String) for public streams.
+  def subscribed_to(record, params)
+    case record
+    when User
+      table("notifications").bulkAdd(record.notifications.map(&:as_json_for_dexie))
+    when Conversation
+      table("messages").bulkAdd(record.messages.where("seq_id > ?", params[:last_seq_id]).map(&:as_json_for_dexie))
+    when String
+      table(record).bulkAdd(Announcement.for_stream(record).map(&:as_json_for_dexie))
+    end
+  end
+
+  # Any public method is a custom action the client can perform.
+  def mark_as_read(data)
+    Message.find(data["id"]).update!(read: true)
+  end
+end
+```
+
+The client subscribes to `DexieChannel` by default:
+
+```js
+const subscription = subscribe(db);
+```
+
+Pass params from the client when adding a stream:
+
+```js
+subscription.addStream(userStream, { last_seq_id: 100 });
+```
+
+`subscribed_to` runs after the stream is opened, and `table(...)` transmits to just this subscriber — so the snapshot arrives before any live mutation. Custom actions are triggered like any ActionCable action: `subscription.perform("mark_as_read", { id: 42 })`.
 
 #### Public streams
 

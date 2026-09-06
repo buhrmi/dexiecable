@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.0.alpha5 - 2026-09-06
+
+### Changed
+
+- Stream tokens now use Rails' signed IDs (`SignedGlobalID`) instead of a custom verifier; expiry is configurable (`expires_in:`/`expires_at:`) and defaults to never expiring.
+
+## 2.0.0.alpha4 - 2026-09-06
+
+### Changed
+
+- `DexieCable` is now a mixin: create your own `DexieChannel` and `include DexieCable`, then add custom actions and a `subscribed_to(record, params)` hook for initial data. The client `subscribe()` defaults to `"DexieChannel"` and accepts an optional channel name.
+
+## 2.0.0.alpha3 - 2026-09-06
+
+### Changed
+
+- Replaced the `on_subscribe` callback with reopening `DexieChannel` to add custom actions and a `subscribed_to(record, params)` hook for initial data. `subscription.addStream()` now accepts extra params, forwarded to the hook.
+
+## 2.0.0.alpha2 - 2026-09-06
+
+### Added
+
+- Added `DexieChannel.on_subscribe`, a callback invoked when a private stream is added, so the server can push initial data.
+
 ## 2.0.0.alpha1 - 2026-09-06
 
 ### Changed

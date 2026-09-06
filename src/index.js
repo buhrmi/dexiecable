@@ -1,9 +1,9 @@
 import { createConsumer } from "@rails/actioncable";
 export { createConsumer }
 
-// The single channel the client subscribes to. Broadcasts originate from the
-// gem's DexieChannel (see the `syncs_to_dexie` ActiveRecord macro).
-const CHANNEL = "DexieCable::DexieChannel";
+// The channel the client subscribes to. Defaults to "DexieChannel", which
+// you define in your app by including DexieCable.
+const DEFAULT_CHANNEL = "DexieChannel";
 
 // ---------------------------------------------------------------------------
 // Module state
@@ -39,14 +39,17 @@ export function setConsumer(c) {
  * Streams are added and removed dynamically after the subscription is
  * established. Private streams use a signed token (the value returned by
  * `DexieChannel.stream_token_for(target)` on the server) with `addStream()`
- * and `removeStream()`. Public streams use `addPublicStream()` and
- * `removePublicStream()` with a plain name. `removeAllStreams()` stops
- * every current stream (e.g. on logout).
+ * and `removeStream()`; `addStream()` also accepts extra params that are
+ * forwarded to the server's `subscribed_to` hook. Public streams use
+ * `addPublicStream()` and `removePublicStream()` with a plain name.
+ * `removeAllStreams()` stops every current stream (e.g. on logout).
  *
  * @param {import("dexie").Dexie} db - Your Dexie database instance.
+ * @param {string|object} [channelOrMixin="DexieChannel"] - Channel class
+ *   name, or an ActionCable lifecycle mixin.
  * @param {object} [mixin={}] - ActionCable lifecycle callbacks.
  * @returns {import("@rails/actioncable").Subscription & {
- *   addStream: (stream: string) => void,
+ *   addStream: (stream: string, params?: Record<string, any>) => void,
  *   removeStream: (stream: string) => void,
  *   addPublicStream: (name: string) => void,
  *   removePublicStream: (name: string) => void,
@@ -57,19 +60,26 @@ export function setConsumer(c) {
  *   import { subscribe } from "dexiecable";
  *   import { db } from "./db";
  *
- *   const subscription = subscribe(db);
- *   subscription.addStream(streamToken);
+ *   const subscription = subscribe(db); // subscribes to "DexieChannel"
+ *   subscription.addStream(streamToken, { last_seq_id: 100 });
  */
-export function subscribe(db, mixin) {
+export function subscribe(db, channelOrMixin, mixin) {
   if (!db) {
     throw new Error("[dexiecable] Pass a Dexie database as the first argument to subscribe().");
+  }
+
+  let channel = DEFAULT_CHANNEL;
+  if (typeof channelOrMixin === "string") {
+    channel = channelOrMixin;
+  } else {
+    mixin = channelOrMixin;
   }
 
   const userMixin = mixin || {};
   const pending = [];
   let connected = false;
 
-  const subscription = getConsumer().subscriptions.create(CHANNEL, {
+  const subscription = getConsumer().subscriptions.create(channel, {
     received(data) {
       replay(db, data);
     },
@@ -96,7 +106,7 @@ export function subscribe(db, mixin) {
     }
   };
 
-  subscription.addStream = (stream) => performStream("add_stream", { stream });
+  subscription.addStream = (stream, params = {}) => performStream("add_stream", { ...params, stream });
   subscription.removeStream = (stream) => performStream("remove_stream", { stream });
   subscription.addPublicStream = (name) => performStream("add_public_stream", { stream: name });
   subscription.removePublicStream = (name) => performStream("remove_public_stream", { stream: name });

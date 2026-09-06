@@ -1,6 +1,6 @@
 // ../src/index.js
 import { createConsumer } from "@rails/actioncable";
-var CHANNEL = "DexieCable::DexieChannel";
+var DEFAULT_CHANNEL = "DexieChannel";
 var consumer = null;
 function getConsumer() {
   consumer ||= createConsumer();
@@ -9,14 +9,20 @@ function getConsumer() {
 function setConsumer(c) {
   consumer = c;
 }
-function subscribe(db, mixin) {
+function subscribe(db, channelOrMixin, mixin) {
   if (!db) {
     throw new Error("[dexiecable] Pass a Dexie database as the first argument to subscribe().");
+  }
+  let channel = DEFAULT_CHANNEL;
+  if (typeof channelOrMixin === "string") {
+    channel = channelOrMixin;
+  } else {
+    mixin = channelOrMixin;
   }
   const userMixin = mixin || {};
   const pending = [];
   let connected = false;
-  const subscription = getConsumer().subscriptions.create(CHANNEL, {
+  const subscription = getConsumer().subscriptions.create(channel, {
     received(data) {
       replay(db, data);
     },
@@ -41,7 +47,7 @@ function subscribe(db, mixin) {
       pending.push([action, data]);
     }
   };
-  subscription.addStream = (stream) => performStream("add_stream", { stream });
+  subscription.addStream = (stream, params = {}) => performStream("add_stream", { ...params, stream });
   subscription.removeStream = (stream) => performStream("remove_stream", { stream });
   subscription.addPublicStream = (name) => performStream("add_public_stream", { stream: name });
   subscription.removePublicStream = (name) => performStream("remove_public_stream", { stream: name });

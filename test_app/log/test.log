@@ -993,3 +993,1002 @@ Finished "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 13:24:51 +0700
 DexieCable::DexieChannel stopped streaming from dexie_cable:dexie:public:message_channel
 Finished "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 13:24:51 +0700
 DexieCable::DexieChannel stopped streaming from dexie_cable:dexie:public:message_channel
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+--------------------------------------------------------------------------------------
+MessageSyncTest: test_syncs_to_dexie_pushes_created_record_to_frontend_via_ActionCable
+--------------------------------------------------------------------------------------
+  [1m[36mMessage Delete All (0.0ms)[0m  [1m[31mDELETE FROM "messages"[0m
+Started GET "/" for 127.0.0.1 at 2026-09-06 13:51:47 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.5ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 4.4ms | GC: 0.4ms)
+Completed 200 OK in 33ms (Views: 7.1ms | ActiveRecord: 0.1ms (1 query, 0 cached) | GC: 12.5ms)
+Started GET "/cable" for 127.0.0.1 at 2026-09-06 13:51:48 +0700
+Started GET "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 13:51:48 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+Started GET "/favicon.ico" for 127.0.0.1 at 2026-09-06 13:51:48 +0700
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+DexieCable::DexieChannel is transmitting the subscription confirmation
+DexieCable::DexieChannel#add_public_stream({"stream" => "message_channel"})
+DexieCable::DexieChannel is streaming from dexie_cable:dexie:public:message_channel
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.2ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Hello from DexieCable!"], ["created_at", "2026-09-06 06:51:48.979080"], ["updated_at", "2026-09-06 06:51:48.979080"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to dexie_cable:dexie:public:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-09-06T06:51:48.979Z", "updated_at" => "2026-09-06T06:51:48.979Z"}]}]}
+[ActionCable] Broadcasting to dexie_cable:dexie:public:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "Hello from DexieCable! [symbol]"}]}]}
+[ActionCable] Broadcasting to dexie_cable:dexie:public:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "Hello from DexieCable! [proc]"}]}]}
+DexieCable::DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-09-06T06:51:48.979Z", "updated_at" => "2026-09-06T06:51:48.979Z"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [symbol]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [proc]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+--------------------------------------------------------------------------------
+MessageSyncTest: test_with:_Symbol_uses_the_named_method_to_serialize_the_record
+--------------------------------------------------------------------------------
+  [1m[36mMessage Delete All (0.0ms)[0m  [1m[31mDELETE FROM "messages"[0m
+Started GET "/" for 127.0.0.1 at 2026-09-06 13:51:49 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.0ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.6ms | GC: 0.0ms)
+Completed 200 OK in 1ms (Views: 0.8ms | ActiveRecord: 0.0ms (1 query, 0 cached) | GC: 0.0ms)
+Started GET "/cable" for 127.0.0.1 at 2026-09-06 13:51:49 +0700
+Started GET "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 13:51:49 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+DexieCable::DexieChannel is transmitting the subscription confirmation
+DexieCable::DexieChannel#add_public_stream({"stream" => "message_channel"})
+DexieCable::DexieChannel is streaming from dexie_cable:dexie:public:message_channel
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.3ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Symbol serialized"], ["created_at", "2026-09-06 06:51:49.138780"], ["updated_at", "2026-09-06 06:51:49.138780"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to dexie_cable:dexie:public:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Symbol serialized", "created_at" => "2026-09-06T06:51:49.138Z", "updated_at" => "2026-09-06T06:51:49.138Z"}]}]}
+[ActionCable] Broadcasting to dexie_cable:dexie:public:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "Symbol serialized [symbol]"}]}]}
+[ActionCable] Broadcasting to dexie_cable:dexie:public:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "Symbol serialized [proc]"}]}]}
+DexieCable::DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized", "created_at" => "2026-09-06T06:51:49.138Z", "updated_at" => "2026-09-06T06:51:49.138Z"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized", "created_at" => "2026-09-06T06:51:49.138Z", "updated_at" => "2026-09-06T06:51:49.138Z"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized [symbol]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized [symbol]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized [proc]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized [proc]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+----------------------------------------------------------------------
+MessageSyncTest: test_with:_Proc_uses_the_proc_to_serialize_the_record
+----------------------------------------------------------------------
+  [1m[36mMessage Delete All (0.0ms)[0m  [1m[31mDELETE FROM "messages"[0m
+Started GET "/" for 127.0.0.1 at 2026-09-06 13:51:49 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.0ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.5ms | GC: 0.0ms)
+Completed 200 OK in 1ms (Views: 0.6ms | ActiveRecord: 0.0ms (1 query, 0 cached) | GC: 0.0ms)
+Started GET "/cable" for 127.0.0.1 at 2026-09-06 13:51:49 +0700
+Started GET "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 13:51:49 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+DexieCable::DexieChannel is transmitting the subscription confirmation
+DexieCable::DexieChannel#add_public_stream({"stream" => "message_channel"})
+DexieCable::DexieChannel is streaming from dexie_cable:dexie:public:message_channel
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.2ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Proc serialized"], ["created_at", "2026-09-06 06:51:49.267882"], ["updated_at", "2026-09-06 06:51:49.267882"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to dexie_cable:dexie:public:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Proc serialized", "created_at" => "2026-09-06T06:51:49.267Z", "updated_at" => "2026-09-06T06:51:49.267Z"}]}]}
+[ActionCable] Broadcasting to dexie_cable:dexie:public:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "Proc serialized [symbol]"}]}]}
+[ActionCable] Broadcasting to dexie_cable:dexie:public:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "Proc serialized [proc]"}]}]}
+DexieCable::DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [symbol]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [symbol]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [symbol]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [proc]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [proc]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [proc]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized", "created_at" => "2026-09-06T06:51:49.267Z", "updated_at" => "2026-09-06T06:51:49.267Z"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized", "created_at" => "2026-09-06T06:51:49.267Z", "updated_at" => "2026-09-06T06:51:49.267Z"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized", "created_at" => "2026-09-06T06:51:49.267Z", "updated_at" => "2026-09-06T06:51:49.267Z"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+Finished "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 13:51:49 +0700
+DexieCable::DexieChannel stopped streaming from dexie_cable:dexie:public:message_channel
+Finished "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 13:51:49 +0700
+DexieCable::DexieChannel stopped streaming from dexie_cable:dexie:public:message_channel
+Finished "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 13:51:49 +0700
+DexieCable::DexieChannel stopped streaming from dexie_cable:dexie:public:message_channel
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+----------------------------------------------------------------------
+MessageSyncTest: test_with:_Proc_uses_the_proc_to_serialize_the_record
+----------------------------------------------------------------------
+  [1m[36mMessage Delete All (0.0ms)[0m  [1m[31mDELETE FROM "messages"[0m
+Started GET "/" for 127.0.0.1 at 2026-09-06 13:56:44 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.7ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 4.8ms | GC: 0.5ms)
+Completed 200 OK in 39ms (Views: 8.0ms | ActiveRecord: 0.1ms (1 query, 0 cached) | GC: 13.4ms)
+Started GET "/cable" for 127.0.0.1 at 2026-09-06 13:56:46 +0700
+Started GET "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 13:56:46 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+Started GET "/favicon.ico" for 127.0.0.1 at 2026-09-06 13:56:46 +0700
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+DexieCable::DexieChannel is transmitting the subscription confirmation
+DexieCable::DexieChannel#add_public_stream({"stream" => "message_channel"})
+DexieCable::DexieChannel is streaming from dexie_cable:dexie:public:message_channel
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.2ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Proc serialized"], ["created_at", "2026-09-06 06:56:46.092467"], ["updated_at", "2026-09-06 06:56:46.092467"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to dexie_cable:dexie:public:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Proc serialized", "created_at" => "2026-09-06T06:56:46.092Z", "updated_at" => "2026-09-06T06:56:46.092Z"}]}]}
+[ActionCable] Broadcasting to dexie_cable:dexie:public:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "Proc serialized [symbol]"}]}]}
+[ActionCable] Broadcasting to dexie_cable:dexie:public:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "Proc serialized [proc]"}]}]}
+DexieCable::DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized", "created_at" => "2026-09-06T06:56:46.092Z", "updated_at" => "2026-09-06T06:56:46.092Z"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [symbol]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [proc]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+--------------------------------------------------------------------------------------
+MessageSyncTest: test_syncs_to_dexie_pushes_created_record_to_frontend_via_ActionCable
+--------------------------------------------------------------------------------------
+  [1m[36mMessage Delete All (0.0ms)[0m  [1m[31mDELETE FROM "messages"[0m
+Started GET "/" for 127.0.0.1 at 2026-09-06 13:56:46 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.4ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.7ms | GC: 0.0ms)
+Completed 200 OK in 2ms (Views: 1.1ms | ActiveRecord: 0.1ms (1 query, 0 cached) | GC: 0.0ms)
+Started GET "/cable" for 127.0.0.1 at 2026-09-06 13:56:46 +0700
+Started GET "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 13:56:46 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+DexieCable::DexieChannel is transmitting the subscription confirmation
+DexieCable::DexieChannel#add_public_stream({"stream" => "message_channel"})
+DexieCable::DexieChannel is streaming from dexie_cable:dexie:public:message_channel
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.4ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Hello from DexieCable!"], ["created_at", "2026-09-06 06:56:46.239609"], ["updated_at", "2026-09-06 06:56:46.239609"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to dexie_cable:dexie:public:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-09-06T06:56:46.239Z", "updated_at" => "2026-09-06T06:56:46.239Z"}]}]}
+[ActionCable] Broadcasting to dexie_cable:dexie:public:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "Hello from DexieCable! [symbol]"}]}]}
+[ActionCable] Broadcasting to dexie_cable:dexie:public:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "Hello from DexieCable! [proc]"}]}]}
+DexieCable::DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-09-06T06:56:46.239Z", "updated_at" => "2026-09-06T06:56:46.239Z"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [proc]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [proc]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [symbol]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-09-06T06:56:46.239Z", "updated_at" => "2026-09-06T06:56:46.239Z"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [symbol]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+--------------------------------------------------------------------------------
+MessageSyncTest: test_with:_Symbol_uses_the_named_method_to_serialize_the_record
+--------------------------------------------------------------------------------
+  [1m[36mMessage Delete All (0.0ms)[0m  [1m[31mDELETE FROM "messages"[0m
+Started GET "/" for 127.0.0.1 at 2026-09-06 13:56:46 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.4ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.0ms | GC: 0.0ms)
+Completed 200 OK in 2ms (Views: 1.2ms | ActiveRecord: 0.0ms (1 query, 0 cached) | GC: 0.0ms)
+Started GET "/cable" for 127.0.0.1 at 2026-09-06 13:56:46 +0700
+Started GET "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 13:56:46 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+DexieCable::DexieChannel is transmitting the subscription confirmation
+DexieCable::DexieChannel#add_public_stream({"stream" => "message_channel"})
+DexieCable::DexieChannel is streaming from dexie_cable:dexie:public:message_channel
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.2ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Symbol serialized"], ["created_at", "2026-09-06 06:56:46.369282"], ["updated_at", "2026-09-06 06:56:46.369282"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to dexie_cable:dexie:public:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Symbol serialized", "created_at" => "2026-09-06T06:56:46.369Z", "updated_at" => "2026-09-06T06:56:46.369Z"}]}]}
+[ActionCable] Broadcasting to dexie_cable:dexie:public:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "Symbol serialized [symbol]"}]}]}
+[ActionCable] Broadcasting to dexie_cable:dexie:public:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "Symbol serialized [proc]"}]}]}
+DexieCable::DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized [symbol]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized [symbol]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized [symbol]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized [proc]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized [proc]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized [proc]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized", "created_at" => "2026-09-06T06:56:46.369Z", "updated_at" => "2026-09-06T06:56:46.369Z"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized", "created_at" => "2026-09-06T06:56:46.369Z", "updated_at" => "2026-09-06T06:56:46.369Z"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized", "created_at" => "2026-09-06T06:56:46.369Z", "updated_at" => "2026-09-06T06:56:46.369Z"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+Finished "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 13:56:46 +0700
+DexieCable::DexieChannel stopped streaming from dexie_cable:dexie:public:message_channel
+Finished "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 13:56:46 +0700
+DexieCable::DexieChannel stopped streaming from dexie_cable:dexie:public:message_channel
+Finished "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 13:56:46 +0700
+DexieCable::DexieChannel stopped streaming from dexie_cable:dexie:public:message_channel
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+--------------------------------------------------------------------------------
+MessageSyncTest: test_with:_Symbol_uses_the_named_method_to_serialize_the_record
+--------------------------------------------------------------------------------
+  [1m[36mMessage Delete All (0.0ms)[0m  [1m[31mDELETE FROM "messages"[0m
+Started GET "/" for 127.0.0.1 at 2026-09-06 14:19:08 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.6ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 4.4ms | GC: 0.0ms)
+Completed 200 OK in 22ms (Views: 7.1ms | ActiveRecord: 0.1ms (1 query, 0 cached) | GC: 0.2ms)
+Started GET "/cable" for 127.0.0.1 at 2026-09-06 14:19:09 +0700
+Started GET "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 14:19:09 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+Started GET "/favicon.ico" for 127.0.0.1 at 2026-09-06 14:19:09 +0700
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+DexieCable::DexieChannel is transmitting the subscription confirmation
+DexieCable::DexieChannel#add_public_stream({"stream" => "message_channel"})
+DexieCable::DexieChannel is streaming from dexie_cable:dexie:public:message_channel
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.3ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Symbol serialized"], ["created_at", "2026-09-06 07:19:09.771096"], ["updated_at", "2026-09-06 07:19:09.771096"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to dexie_cable:dexie:public:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Symbol serialized", "created_at" => "2026-09-06T07:19:09.771Z", "updated_at" => "2026-09-06T07:19:09.771Z"}]}]}
+[ActionCable] Broadcasting to dexie_cable:dexie:public:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "Symbol serialized [symbol]"}]}]}
+[ActionCable] Broadcasting to dexie_cable:dexie:public:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "Symbol serialized [proc]"}]}]}
+DexieCable::DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized", "created_at" => "2026-09-06T07:19:09.771Z", "updated_at" => "2026-09-06T07:19:09.771Z"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized [proc]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized [symbol]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+--------------------------------------------------------------------------------------
+MessageSyncTest: test_syncs_to_dexie_pushes_created_record_to_frontend_via_ActionCable
+--------------------------------------------------------------------------------------
+  [1m[36mMessage Delete All (0.0ms)[0m  [1m[31mDELETE FROM "messages"[0m
+Started GET "/" for 127.0.0.1 at 2026-09-06 14:19:09 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.0ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.5ms | GC: 0.0ms)
+Completed 200 OK in 1ms (Views: 0.7ms | ActiveRecord: 0.0ms (1 query, 0 cached) | GC: 0.0ms)
+Started GET "/cable" for 127.0.0.1 at 2026-09-06 14:19:09 +0700
+Started GET "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 14:19:09 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+DexieCable::DexieChannel is transmitting the subscription confirmation
+DexieCable::DexieChannel#add_public_stream({"stream" => "message_channel"})
+DexieCable::DexieChannel is streaming from dexie_cable:dexie:public:message_channel
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.2ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Hello from DexieCable!"], ["created_at", "2026-09-06 07:19:09.960141"], ["updated_at", "2026-09-06 07:19:09.960141"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to dexie_cable:dexie:public:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-09-06T07:19:09.960Z", "updated_at" => "2026-09-06T07:19:09.960Z"}]}]}
+[ActionCable] Broadcasting to dexie_cable:dexie:public:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "Hello from DexieCable! [symbol]"}]}]}
+[ActionCable] Broadcasting to dexie_cable:dexie:public:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "Hello from DexieCable! [proc]"}]}]}
+DexieCable::DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [symbol]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [proc]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [proc]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-09-06T07:19:09.960Z", "updated_at" => "2026-09-06T07:19:09.960Z"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-09-06T07:19:09.960Z", "updated_at" => "2026-09-06T07:19:09.960Z"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [symbol]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+----------------------------------------------------------------------
+MessageSyncTest: test_with:_Proc_uses_the_proc_to_serialize_the_record
+----------------------------------------------------------------------
+  [1m[36mMessage Delete All (0.0ms)[0m  [1m[31mDELETE FROM "messages"[0m
+Started GET "/" for 127.0.0.1 at 2026-09-06 14:19:10 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.0ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.4ms | GC: 0.0ms)
+Completed 200 OK in 1ms (Views: 0.5ms | ActiveRecord: 0.0ms (1 query, 0 cached) | GC: 0.0ms)
+Started GET "/cable" for 127.0.0.1 at 2026-09-06 14:19:10 +0700
+Started GET "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 14:19:10 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+DexieCable::DexieChannel is transmitting the subscription confirmation
+DexieCable::DexieChannel#add_public_stream({"stream" => "message_channel"})
+DexieCable::DexieChannel is streaming from dexie_cable:dexie:public:message_channel
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.2ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Proc serialized"], ["created_at", "2026-09-06 07:19:10.092360"], ["updated_at", "2026-09-06 07:19:10.092360"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to dexie_cable:dexie:public:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Proc serialized", "created_at" => "2026-09-06T07:19:10.092Z", "updated_at" => "2026-09-06T07:19:10.092Z"}]}]}
+[ActionCable] Broadcasting to dexie_cable:dexie:public:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "Proc serialized [symbol]"}]}]}
+[ActionCable] Broadcasting to dexie_cable:dexie:public:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "Proc serialized [proc]"}]}]}
+DexieCable::DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [symbol]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [symbol]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [symbol]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [proc]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [proc]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [proc]"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized", "created_at" => "2026-09-06T07:19:10.092Z", "updated_at" => "2026-09-06T07:19:10.092Z"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized", "created_at" => "2026-09-06T07:19:10.092Z", "updated_at" => "2026-09-06T07:19:10.092Z"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+DexieCable::DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized", "created_at" => "2026-09-06T07:19:10.092Z", "updated_at" => "2026-09-06T07:19:10.092Z"}]}]} (via streamed from dexie_cable:dexie:public:message_channel)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+Finished "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 14:19:10 +0700
+DexieCable::DexieChannel stopped streaming from dexie_cable:dexie:public:message_channel
+Finished "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 14:19:10 +0700
+DexieCable::DexieChannel stopped streaming from dexie_cable:dexie:public:message_channel
+Finished "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 14:19:10 +0700
+DexieCable::DexieChannel stopped streaming from dexie_cable:dexie:public:message_channel
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+--------------------------------------------------------------------------------------
+MessageSyncTest: test_syncs_to_dexie_pushes_created_record_to_frontend_via_ActionCable
+--------------------------------------------------------------------------------------
+  [1m[36mMessage Delete All (0.1ms)[0m  [1m[31mDELETE FROM "messages"[0m
+Started GET "/" for 127.0.0.1 at 2026-09-06 14:44:00 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.5ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 3.4ms | GC: 0.0ms)
+Completed 200 OK in 21ms (Views: 5.7ms | ActiveRecord: 0.1ms (1 query, 0 cached) | GC: 0.2ms)
+Started GET "/cable" for 127.0.0.1 at 2026-09-06 14:44:01 +0700
+Started GET "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 14:44:01 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+Started GET "/favicon.ico" for 127.0.0.1 at 2026-09-06 14:44:01 +0700
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+DexieChannel is transmitting the subscription confirmation
+DexieChannel#add_public_stream({"stream" => "message_channel"})
+DexieChannel is streaming from dexie:public:message_channel
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.2ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Hello from DexieCable!"], ["created_at", "2026-09-06 07:44:01.300454"], ["updated_at", "2026-09-06 07:44:01.300454"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-09-06T07:44:01.300Z", "updated_at" => "2026-09-06T07:44:01.300Z"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "Hello from DexieCable! [symbol]"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "Hello from DexieCable! [proc]"}]}]}
+DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-09-06T07:44:01.300Z", "updated_at" => "2026-09-06T07:44:01.300Z"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [symbol]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [proc]"}]}]} (via streamed from dexie:public:message_channel)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+----------------------------------------------------------------------
+MessageSyncTest: test_with:_Proc_uses_the_proc_to_serialize_the_record
+----------------------------------------------------------------------
+  [1m[36mMessage Delete All (0.0ms)[0m  [1m[31mDELETE FROM "messages"[0m
+Started GET "/" for 127.0.0.1 at 2026-09-06 14:44:01 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.0ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.5ms | GC: 0.0ms)
+Completed 200 OK in 1ms (Views: 0.6ms | ActiveRecord: 0.0ms (1 query, 0 cached) | GC: 0.0ms)
+Started GET "/cable" for 127.0.0.1 at 2026-09-06 14:44:01 +0700
+Started GET "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 14:44:01 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+DexieChannel is transmitting the subscription confirmation
+DexieChannel#add_public_stream({"stream" => "message_channel"})
+DexieChannel is streaming from dexie:public:message_channel
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.2ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Proc serialized"], ["created_at", "2026-09-06 07:44:01.452168"], ["updated_at", "2026-09-06 07:44:01.452168"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Proc serialized", "created_at" => "2026-09-06T07:44:01.452Z", "updated_at" => "2026-09-06T07:44:01.452Z"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "Proc serialized [symbol]"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "Proc serialized [proc]"}]}]}
+DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [symbol]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [proc]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [proc]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized", "created_at" => "2026-09-06T07:44:01.452Z", "updated_at" => "2026-09-06T07:44:01.452Z"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized", "created_at" => "2026-09-06T07:44:01.452Z", "updated_at" => "2026-09-06T07:44:01.452Z"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [symbol]"}]}]} (via streamed from dexie:public:message_channel)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+--------------------------------------------------------------------------------
+MessageSyncTest: test_with:_Symbol_uses_the_named_method_to_serialize_the_record
+--------------------------------------------------------------------------------
+  [1m[36mMessage Delete All (0.0ms)[0m  [1m[31mDELETE FROM "messages"[0m
+Started GET "/" for 127.0.0.1 at 2026-09-06 14:44:01 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.0ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.5ms | GC: 0.0ms)
+Completed 200 OK in 1ms (Views: 0.7ms | ActiveRecord: 0.0ms (1 query, 0 cached) | GC: 0.0ms)
+Started GET "/cable" for 127.0.0.1 at 2026-09-06 14:44:01 +0700
+Started GET "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 14:44:01 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+DexieChannel is transmitting the subscription confirmation
+DexieChannel#add_public_stream({"stream" => "message_channel"})
+DexieChannel is streaming from dexie:public:message_channel
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.2ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Symbol serialized"], ["created_at", "2026-09-06 07:44:01.595977"], ["updated_at", "2026-09-06 07:44:01.595977"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Symbol serialized", "created_at" => "2026-09-06T07:44:01.595Z", "updated_at" => "2026-09-06T07:44:01.595Z"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "Symbol serialized [symbol]"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "Symbol serialized [proc]"}]}]}
+DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized [symbol]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized [symbol]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized [symbol]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized [proc]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized [proc]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized [proc]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized", "created_at" => "2026-09-06T07:44:01.595Z", "updated_at" => "2026-09-06T07:44:01.595Z"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized", "created_at" => "2026-09-06T07:44:01.595Z", "updated_at" => "2026-09-06T07:44:01.595Z"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized", "created_at" => "2026-09-06T07:44:01.595Z", "updated_at" => "2026-09-06T07:44:01.595Z"}]}]} (via streamed from dexie:public:message_channel)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+Finished "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 14:44:01 +0700
+DexieChannel stopped streaming from dexie:public:message_channel
+Finished "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 14:44:01 +0700
+DexieChannel stopped streaming from dexie:public:message_channel
+Finished "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 14:44:01 +0700
+DexieChannel stopped streaming from dexie:public:message_channel
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+-----------------------------------------------------------------
+DexieChannelTest: test_subscribed_to_receives_the_resolved_record
+-----------------------------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.2ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "hello"], ["created_at", "2026-09-06 08:03:24.079520"], ["updated_at", "2026-09-06 08:03:24.079520"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "hello", "created_at" => "2026-09-06T08:03:24.079Z", "updated_at" => "2026-09-06T08:03:24.079Z"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "hello [symbol]"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "hello [proc]"}]}]}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+-----------------------------------------------------------------
+DexieChannelTest: test_subscribed_to_receives_the_resolved_record
+-----------------------------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.2ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "hello"], ["created_at", "2026-09-06 08:04:21.527839"], ["updated_at", "2026-09-06 08:04:21.527839"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "hello", "created_at" => "2026-09-06T08:04:21.527Z", "updated_at" => "2026-09-06T08:04:21.527Z"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "hello [symbol]"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "hello [proc]"}]}]}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+-----------------------------------------------------------------
+DexieChannelTest: test_subscribed_to_receives_the_resolved_record
+-----------------------------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.2ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "hello"], ["created_at", "2026-09-06 08:07:47.362483"], ["updated_at", "2026-09-06 08:07:47.362483"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "hello", "created_at" => "2026-09-06T08:07:47.362Z", "updated_at" => "2026-09-06T08:07:47.362Z"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "hello [symbol]"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "hello [proc]"}]}]}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+-----------------------------------------------------------------
+DexieChannelTest: test_subscribed_to_receives_the_resolved_record
+-----------------------------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.2ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "hello"], ["created_at", "2026-09-06 08:11:10.767801"], ["updated_at", "2026-09-06 08:11:10.767801"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "hello", "created_at" => "2026-09-06T08:11:10.767Z", "updated_at" => "2026-09-06T08:11:10.767Z"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "hello [symbol]"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "hello [proc]"}]}]}
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+-----------------------------------------------------------------
+DexieChannelTest: test_subscribed_to_receives_the_resolved_record
+-----------------------------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.2ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "hello"], ["created_at", "2026-09-06 08:11:17.883026"], ["updated_at", "2026-09-06 08:11:17.883026"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "hello", "created_at" => "2026-09-06T08:11:17.883Z", "updated_at" => "2026-09-06T08:11:17.883Z"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "hello [symbol]"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "hello [proc]"}]}]}
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+--------------------------------------------------------------------------------
+MessageSyncTest: test_with:_Symbol_uses_the_named_method_to_serialize_the_record
+--------------------------------------------------------------------------------
+  [1m[36mMessage Delete All (0.0ms)[0m  [1m[31mDELETE FROM "messages"[0m
+Started GET "/" for 127.0.0.1 at 2026-09-06 15:11:32 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 1.0ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 4.5ms | GC: 0.0ms)
+Completed 200 OK in 23ms (Views: 8.2ms | ActiveRecord: 0.1ms (1 query, 0 cached) | GC: 0.0ms)
+Started GET "/cable" for 127.0.0.1 at 2026-09-06 15:11:33 +0700
+Started GET "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 15:11:33 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+Started GET "/favicon.ico" for 127.0.0.1 at 2026-09-06 15:11:33 +0700
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+DexieChannel is transmitting the subscription confirmation
+DexieChannel#add_public_stream({"stream" => "message_channel"})
+DexieChannel is streaming from dexie:public:message_channel
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.2ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Symbol serialized"], ["created_at", "2026-09-06 08:11:33.283908"], ["updated_at", "2026-09-06 08:11:33.283908"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Symbol serialized", "created_at" => "2026-09-06T08:11:33.283Z", "updated_at" => "2026-09-06T08:11:33.283Z"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "Symbol serialized [symbol]"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "Symbol serialized [proc]"}]}]}
+DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized", "created_at" => "2026-09-06T08:11:33.283Z", "updated_at" => "2026-09-06T08:11:33.283Z"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized [symbol]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized [proc]"}]}]} (via streamed from dexie:public:message_channel)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+----------------------------------------------------------------------
+MessageSyncTest: test_with:_Proc_uses_the_proc_to_serialize_the_record
+----------------------------------------------------------------------
+  [1m[36mMessage Delete All (0.0ms)[0m  [1m[31mDELETE FROM "messages"[0m
+Started GET "/" for 127.0.0.1 at 2026-09-06 15:11:33 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.0ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.6ms | GC: 0.0ms)
+Completed 200 OK in 1ms (Views: 0.7ms | ActiveRecord: 0.0ms (1 query, 0 cached) | GC: 0.0ms)
+Started GET "/cable" for 127.0.0.1 at 2026-09-06 15:11:33 +0700
+Started GET "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 15:11:33 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+DexieChannel is transmitting the subscription confirmation
+DexieChannel#add_public_stream({"stream" => "message_channel"})
+DexieChannel is streaming from dexie:public:message_channel
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.3ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Proc serialized"], ["created_at", "2026-09-06 08:11:33.455680"], ["updated_at", "2026-09-06 08:11:33.455680"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Proc serialized", "created_at" => "2026-09-06T08:11:33.455Z", "updated_at" => "2026-09-06T08:11:33.455Z"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "Proc serialized [symbol]"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "Proc serialized [proc]"}]}]}
+DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [symbol]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [proc]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [proc]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized", "created_at" => "2026-09-06T08:11:33.455Z", "updated_at" => "2026-09-06T08:11:33.455Z"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized", "created_at" => "2026-09-06T08:11:33.455Z", "updated_at" => "2026-09-06T08:11:33.455Z"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [symbol]"}]}]} (via streamed from dexie:public:message_channel)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+--------------------------------------------------------------------------------------
+MessageSyncTest: test_syncs_to_dexie_pushes_created_record_to_frontend_via_ActionCable
+--------------------------------------------------------------------------------------
+  [1m[36mMessage Delete All (0.0ms)[0m  [1m[31mDELETE FROM "messages"[0m
+Started GET "/" for 127.0.0.1 at 2026-09-06 15:11:33 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.0ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.3ms | GC: 0.0ms)
+Completed 200 OK in 1ms (Views: 0.4ms | ActiveRecord: 0.0ms (1 query, 0 cached) | GC: 0.0ms)
+Started GET "/cable" for 127.0.0.1 at 2026-09-06 15:11:33 +0700
+Started GET "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 15:11:33 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+DexieChannel is transmitting the subscription confirmation
+DexieChannel#add_public_stream({"stream" => "message_channel"})
+DexieChannel is streaming from dexie:public:message_channel
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.2ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Hello from DexieCable!"], ["created_at", "2026-09-06 08:11:33.586223"], ["updated_at", "2026-09-06 08:11:33.586223"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-09-06T08:11:33.586Z", "updated_at" => "2026-09-06T08:11:33.586Z"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "Hello from DexieCable! [symbol]"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "Hello from DexieCable! [proc]"}]}]}
+DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [symbol]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [symbol]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [symbol]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [proc]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [proc]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [proc]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-09-06T08:11:33.586Z", "updated_at" => "2026-09-06T08:11:33.586Z"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-09-06T08:11:33.586Z", "updated_at" => "2026-09-06T08:11:33.586Z"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-09-06T08:11:33.586Z", "updated_at" => "2026-09-06T08:11:33.586Z"}]}]} (via streamed from dexie:public:message_channel)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+Finished "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 15:11:33 +0700
+DexieChannel stopped streaming from dexie:public:message_channel
+Finished "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 15:11:33 +0700
+DexieChannel stopped streaming from dexie:public:message_channel
+Finished "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 15:11:33 +0700
+DexieChannel stopped streaming from dexie:public:message_channel
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+--------------------------------------------------------------------------------
+DexieChannelTest: test_subscribed_to_receives_the_stream_name_for_public_streams
+--------------------------------------------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+-------------------------------------------------------------------------------------
+DexieChannelTest: test_subscribed_to_receives_the_resolved_record_for_private_streams
+-------------------------------------------------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.2ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "hello"], ["created_at", "2026-09-06 08:14:23.950403"], ["updated_at", "2026-09-06 08:14:23.950403"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "hello", "created_at" => "2026-09-06T08:14:23.950Z", "updated_at" => "2026-09-06T08:14:23.950Z"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "hello [symbol]"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "hello [proc]"}]}]}
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+--------------------------------------------------------------------------------
+MessageSyncTest: test_with:_Symbol_uses_the_named_method_to_serialize_the_record
+--------------------------------------------------------------------------------
+  [1m[36mMessage Delete All (0.0ms)[0m  [1m[31mDELETE FROM "messages"[0m
+Started GET "/" for 127.0.0.1 at 2026-09-06 15:14:33 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.6ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 3.8ms | GC: 0.0ms)
+Completed 200 OK in 21ms (Views: 6.7ms | ActiveRecord: 0.1ms (1 query, 0 cached) | GC: 0.0ms)
+Started GET "/cable" for 127.0.0.1 at 2026-09-06 15:14:33 +0700
+Started GET "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 15:14:33 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+Started GET "/favicon.ico" for 127.0.0.1 at 2026-09-06 15:14:33 +0700
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+DexieChannel is transmitting the subscription confirmation
+DexieChannel#add_public_stream({"stream" => "message_channel"})
+DexieChannel is streaming from dexie:public:message_channel
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.5ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Symbol serialized"], ["created_at", "2026-09-06 08:14:33.936931"], ["updated_at", "2026-09-06 08:14:33.936931"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Symbol serialized", "created_at" => "2026-09-06T08:14:33.936Z", "updated_at" => "2026-09-06T08:14:33.936Z"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "Symbol serialized [symbol]"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "Symbol serialized [proc]"}]}]}
+DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized [symbol]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized", "created_at" => "2026-09-06T08:14:33.936Z", "updated_at" => "2026-09-06T08:14:33.936Z"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized [proc]"}]}]} (via streamed from dexie:public:message_channel)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+--------------------------------------------------------------------------------------
+MessageSyncTest: test_syncs_to_dexie_pushes_created_record_to_frontend_via_ActionCable
+--------------------------------------------------------------------------------------
+  [1m[36mMessage Delete All (0.0ms)[0m  [1m[31mDELETE FROM "messages"[0m
+Started GET "/" for 127.0.0.1 at 2026-09-06 15:14:34 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.0ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.4ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.9ms | GC: 0.2ms)
+Completed 200 OK in 1ms (Views: 1.1ms | ActiveRecord: 0.0ms (1 query, 0 cached) | GC: 0.2ms)
+Started GET "/cable" for 127.0.0.1 at 2026-09-06 15:14:34 +0700
+Started GET "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 15:14:34 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+DexieChannel is transmitting the subscription confirmation
+DexieChannel#add_public_stream({"stream" => "message_channel"})
+DexieChannel is streaming from dexie:public:message_channel
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.2ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Hello from DexieCable!"], ["created_at", "2026-09-06 08:14:34.104475"], ["updated_at", "2026-09-06 08:14:34.104475"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-09-06T08:14:34.104Z", "updated_at" => "2026-09-06T08:14:34.104Z"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "Hello from DexieCable! [symbol]"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "Hello from DexieCable! [proc]"}]}]}
+DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [symbol]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [proc]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [proc]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [symbol]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-09-06T08:14:34.104Z", "updated_at" => "2026-09-06T08:14:34.104Z"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-09-06T08:14:34.104Z", "updated_at" => "2026-09-06T08:14:34.104Z"}]}]} (via streamed from dexie:public:message_channel)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+----------------------------------------------------------------------
+MessageSyncTest: test_with:_Proc_uses_the_proc_to_serialize_the_record
+----------------------------------------------------------------------
+  [1m[36mMessage Delete All (0.0ms)[0m  [1m[31mDELETE FROM "messages"[0m
+Started GET "/" for 127.0.0.1 at 2026-09-06 15:14:34 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.0ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.4ms | GC: 0.0ms)
+Completed 200 OK in 1ms (Views: 0.5ms | ActiveRecord: 0.0ms (1 query, 0 cached) | GC: 0.0ms)
+Started GET "/cable" for 127.0.0.1 at 2026-09-06 15:14:34 +0700
+Started GET "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 15:14:34 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+DexieChannel is transmitting the subscription confirmation
+DexieChannel#add_public_stream({"stream" => "message_channel"})
+DexieChannel is streaming from dexie:public:message_channel
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.2ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Proc serialized"], ["created_at", "2026-09-06 08:14:34.246895"], ["updated_at", "2026-09-06 08:14:34.246895"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Proc serialized", "created_at" => "2026-09-06T08:14:34.246Z", "updated_at" => "2026-09-06T08:14:34.246Z"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "Proc serialized [symbol]"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "Proc serialized [proc]"}]}]}
+DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [symbol]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [symbol]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [symbol]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [proc]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [proc]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [proc]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized", "created_at" => "2026-09-06T08:14:34.246Z", "updated_at" => "2026-09-06T08:14:34.246Z"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized", "created_at" => "2026-09-06T08:14:34.246Z", "updated_at" => "2026-09-06T08:14:34.246Z"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized", "created_at" => "2026-09-06T08:14:34.246Z", "updated_at" => "2026-09-06T08:14:34.246Z"}]}]} (via streamed from dexie:public:message_channel)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+Finished "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 15:14:34 +0700
+DexieChannel stopped streaming from dexie:public:message_channel
+Finished "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 15:14:34 +0700
+DexieChannel stopped streaming from dexie:public:message_channel
+Finished "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 15:14:34 +0700
+DexieChannel stopped streaming from dexie:public:message_channel
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+-------------------------------------------------------------------------------------
+DexieChannelTest: test_subscribed_to_receives_the_resolved_record_for_private_streams
+-------------------------------------------------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.4ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "hello"], ["created_at", "2026-09-06 08:18:31.376959"], ["updated_at", "2026-09-06 08:18:31.376959"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "hello", "created_at" => "2026-09-06T08:18:31.376Z", "updated_at" => "2026-09-06T08:18:31.376Z"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "hello [symbol]"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "hello [proc]"}]}]}
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+--------------------------------------------------------------------------------
+DexieChannelTest: test_subscribed_to_receives_the_stream_name_for_public_streams
+--------------------------------------------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+--------------------------------------------------------------------------------
+MessageSyncTest: test_with:_Symbol_uses_the_named_method_to_serialize_the_record
+--------------------------------------------------------------------------------
+  [1m[36mMessage Delete All (0.0ms)[0m  [1m[31mDELETE FROM "messages"[0m
+Started GET "/" for 127.0.0.1 at 2026-09-06 15:18:41 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.2ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.9ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 4.2ms | GC: 0.0ms)
+Completed 200 OK in 23ms (Views: 6.9ms | ActiveRecord: 0.2ms (1 query, 0 cached) | GC: 0.0ms)
+Started GET "/cable" for 127.0.0.1 at 2026-09-06 15:18:42 +0700
+Started GET "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 15:18:42 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+Started GET "/favicon.ico" for 127.0.0.1 at 2026-09-06 15:18:42 +0700
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+DexieChannel is transmitting the subscription confirmation
+DexieChannel#add_public_stream({"stream" => "message_channel"})
+DexieChannel is streaming from dexie:public:message_channel
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (1.0ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Symbol serialized"], ["created_at", "2026-09-06 08:18:42.089329"], ["updated_at", "2026-09-06 08:18:42.089329"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Symbol serialized", "created_at" => "2026-09-06T08:18:42.089Z", "updated_at" => "2026-09-06T08:18:42.089Z"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "Symbol serialized [symbol]"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "Symbol serialized [proc]"}]}]}
+DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized", "created_at" => "2026-09-06T08:18:42.089Z", "updated_at" => "2026-09-06T08:18:42.089Z"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized [symbol]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized [proc]"}]}]} (via streamed from dexie:public:message_channel)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+----------------------------------------------------------------------
+MessageSyncTest: test_with:_Proc_uses_the_proc_to_serialize_the_record
+----------------------------------------------------------------------
+  [1m[36mMessage Delete All (0.0ms)[0m  [1m[31mDELETE FROM "messages"[0m
+Started GET "/" for 127.0.0.1 at 2026-09-06 15:18:42 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.4ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 1.0ms | GC: 0.3ms)
+Completed 200 OK in 2ms (Views: 1.4ms | ActiveRecord: 0.0ms (1 query, 0 cached) | GC: 0.3ms)
+Started GET "/cable" for 127.0.0.1 at 2026-09-06 15:18:42 +0700
+Started GET "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 15:18:42 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+DexieChannel is transmitting the subscription confirmation
+DexieChannel#add_public_stream({"stream" => "message_channel"})
+DexieChannel is streaming from dexie:public:message_channel
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.2ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Proc serialized"], ["created_at", "2026-09-06 08:18:42.255083"], ["updated_at", "2026-09-06 08:18:42.255083"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Proc serialized", "created_at" => "2026-09-06T08:18:42.255Z", "updated_at" => "2026-09-06T08:18:42.255Z"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "Proc serialized [symbol]"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "Proc serialized [proc]"}]}]}
+DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [symbol]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [proc]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [proc]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized", "created_at" => "2026-09-06T08:18:42.255Z", "updated_at" => "2026-09-06T08:18:42.255Z"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized", "created_at" => "2026-09-06T08:18:42.255Z", "updated_at" => "2026-09-06T08:18:42.255Z"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [symbol]"}]}]} (via streamed from dexie:public:message_channel)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+--------------------------------------------------------------------------------------
+MessageSyncTest: test_syncs_to_dexie_pushes_created_record_to_frontend_via_ActionCable
+--------------------------------------------------------------------------------------
+  [1m[36mMessage Delete All (0.0ms)[0m  [1m[31mDELETE FROM "messages"[0m
+Started GET "/" for 127.0.0.1 at 2026-09-06 15:18:42 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.0ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.5ms | GC: 0.0ms)
+Completed 200 OK in 1ms (Views: 0.6ms | ActiveRecord: 0.0ms (1 query, 0 cached) | GC: 0.0ms)
+Started GET "/cable" for 127.0.0.1 at 2026-09-06 15:18:42 +0700
+Started GET "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 15:18:42 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+DexieChannel is transmitting the subscription confirmation
+DexieChannel#add_public_stream({"stream" => "message_channel"})
+DexieChannel is streaming from dexie:public:message_channel
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.2ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Hello from DexieCable!"], ["created_at", "2026-09-06 08:18:42.387713"], ["updated_at", "2026-09-06 08:18:42.387713"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-09-06T08:18:42.387Z", "updated_at" => "2026-09-06T08:18:42.387Z"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "Hello from DexieCable! [symbol]"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "Hello from DexieCable! [proc]"}]}]}
+DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [symbol]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [symbol]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [symbol]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [proc]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [proc]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [proc]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-09-06T08:18:42.387Z", "updated_at" => "2026-09-06T08:18:42.387Z"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-09-06T08:18:42.387Z", "updated_at" => "2026-09-06T08:18:42.387Z"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-09-06T08:18:42.387Z", "updated_at" => "2026-09-06T08:18:42.387Z"}]}]} (via streamed from dexie:public:message_channel)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+Finished "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 15:18:42 +0700
+DexieChannel stopped streaming from dexie:public:message_channel
+Finished "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 15:18:42 +0700
+DexieChannel stopped streaming from dexie:public:message_channel
+Finished "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 15:18:42 +0700
+DexieChannel stopped streaming from dexie:public:message_channel
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+------------------------------------------------------------------------------
+DexieChannelTest: test_stream_tokens_with_an_expiry_in_the_past_do_not_resolve
+------------------------------------------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.5ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "hello"], ["created_at", "2026-09-06 08:21:55.006595"], ["updated_at", "2026-09-06 08:21:55.006595"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "hello", "created_at" => "2026-09-06T08:21:55.006Z", "updated_at" => "2026-09-06T08:21:55.006Z"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "hello [symbol]"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "hello [proc]"}]}]}
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+--------------------------------------------------------------------------------
+DexieChannelTest: test_subscribed_to_receives_the_stream_name_for_public_streams
+--------------------------------------------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+-------------------------------------------------------------------------------------
+DexieChannelTest: test_subscribed_to_receives_the_resolved_record_for_private_streams
+-------------------------------------------------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.1ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "hello"], ["created_at", "2026-09-06 08:21:55.016084"], ["updated_at", "2026-09-06 08:21:55.016084"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "hello", "created_at" => "2026-09-06T08:21:55.016Z", "updated_at" => "2026-09-06T08:21:55.016Z"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "hello [symbol]"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "hello [proc]"}]}]}
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages" WHERE "messages"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+----------------------------------------------------------------------
+MessageSyncTest: test_with:_Proc_uses_the_proc_to_serialize_the_record
+----------------------------------------------------------------------
+  [1m[36mMessage Delete All (0.0ms)[0m  [1m[31mDELETE FROM "messages"[0m
+Started GET "/" for 127.0.0.1 at 2026-09-06 15:22:03 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.1ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.7ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 4.3ms | GC: 0.0ms)
+Completed 200 OK in 22ms (Views: 6.9ms | ActiveRecord: 0.1ms (1 query, 0 cached) | GC: 0.0ms)
+Started GET "/cable" for 127.0.0.1 at 2026-09-06 15:22:04 +0700
+Started GET "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 15:22:04 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+Started GET "/favicon.ico" for 127.0.0.1 at 2026-09-06 15:22:04 +0700
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+DexieChannel is transmitting the subscription confirmation
+DexieChannel#add_public_stream({"stream" => "message_channel"})
+DexieChannel is streaming from dexie:public:message_channel
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.8ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Proc serialized"], ["created_at", "2026-09-06 08:22:04.555975"], ["updated_at", "2026-09-06 08:22:04.555975"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Proc serialized", "created_at" => "2026-09-06T08:22:04.555Z", "updated_at" => "2026-09-06T08:22:04.555Z"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "Proc serialized [symbol]"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "Proc serialized [proc]"}]}]}
+DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized", "created_at" => "2026-09-06T08:22:04.555Z", "updated_at" => "2026-09-06T08:22:04.555Z"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [symbol]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Proc serialized [proc]"}]}]} (via streamed from dexie:public:message_channel)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+--------------------------------------------------------------------------------------
+MessageSyncTest: test_syncs_to_dexie_pushes_created_record_to_frontend_via_ActionCable
+--------------------------------------------------------------------------------------
+  [1m[36mMessage Delete All (0.0ms)[0m  [1m[31mDELETE FROM "messages"[0m
+Started GET "/" for 127.0.0.1 at 2026-09-06 15:22:04 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.0ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.3ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.8ms | GC: 0.2ms)
+Completed 200 OK in 1ms (Views: 1.0ms | ActiveRecord: 0.0ms (1 query, 0 cached) | GC: 0.2ms)
+Started GET "/cable" for 127.0.0.1 at 2026-09-06 15:22:04 +0700
+Started GET "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 15:22:04 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+DexieChannel is transmitting the subscription confirmation
+DexieChannel#add_public_stream({"stream" => "message_channel"})
+DexieChannel is streaming from dexie:public:message_channel
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.3ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Hello from DexieCable!"], ["created_at", "2026-09-06 08:22:04.736888"], ["updated_at", "2026-09-06 08:22:04.736888"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-09-06T08:22:04.736Z", "updated_at" => "2026-09-06T08:22:04.736Z"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "Hello from DexieCable! [symbol]"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "Hello from DexieCable! [proc]"}]}]}
+DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-09-06T08:22:04.736Z", "updated_at" => "2026-09-06T08:22:04.736Z"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [proc]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [proc]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [symbol]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable!", "created_at" => "2026-09-06T08:22:04.736Z", "updated_at" => "2026-09-06T08:22:04.736Z"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Hello from DexieCable! [symbol]"}]}]} (via streamed from dexie:public:message_channel)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+--------------------------------------------------------------------------------
+MessageSyncTest: test_with:_Symbol_uses_the_named_method_to_serialize_the_record
+--------------------------------------------------------------------------------
+  [1m[36mMessage Delete All (0.0ms)[0m  [1m[31mDELETE FROM "messages"[0m
+Started GET "/" for 127.0.0.1 at 2026-09-06 15:22:04 +0700
+Processing by MessagesController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering messages/index.html.erb within layouts/application
+  [1m[36mMessage Load (0.0ms)[0m  [1m[34mSELECT "messages".* FROM "messages"[0m
+  Rendered messages/index.html.erb within layouts/application (Duration: 0.2ms | GC: 0.0ms)
+  Rendered layout layouts/application.html.erb (Duration: 0.4ms | GC: 0.0ms)
+Completed 200 OK in 1ms (Views: 0.6ms | ActiveRecord: 0.0ms (1 query, 0 cached) | GC: 0.0ms)
+Started GET "/cable" for 127.0.0.1 at 2026-09-06 15:22:04 +0700
+Started GET "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 15:22:04 +0700
+Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: Upgrade, HTTP_UPGRADE: websocket)
+DexieChannel is transmitting the subscription confirmation
+DexieChannel#add_public_stream({"stream" => "message_channel"})
+DexieChannel is streaming from dexie:public:message_channel
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mMessage Create (0.2ms)[0m  [1m[32mINSERT INTO "messages" ("body", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["body", "Symbol serialized"], ["created_at", "2026-09-06 08:22:04.880284"], ["updated_at", "2026-09-06 08:22:04.880284"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "messages", ops: [{method: :add, params: [{"id" => 1, "body" => "Symbol serialized", "created_at" => "2026-09-06T08:22:04.880Z", "updated_at" => "2026-09-06T08:22:04.880Z"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "custom_messages", ops: [{method: :add, params: [{id: 1, body: "Symbol serialized [symbol]"}]}]}
+[ActionCable] Broadcasting to dexie:public:message_channel: {table: "proc_messages", ops: [{method: :add, params: [{id: 1, body: "Symbol serialized [proc]"}]}]}
+DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized [symbol]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized [symbol]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "custom_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized [symbol]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized [proc]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized [proc]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "proc_messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized [proc]"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized", "created_at" => "2026-09-06T08:22:04.880Z", "updated_at" => "2026-09-06T08:22:04.880Z"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized", "created_at" => "2026-09-06T08:22:04.880Z", "updated_at" => "2026-09-06T08:22:04.880Z"}]}]} (via streamed from dexie:public:message_channel)
+DexieChannel transmitting {"table" => "messages", "ops" => [{"method" => "add", "params" => [{"id" => 1, "body" => "Symbol serialized", "created_at" => "2026-09-06T08:22:04.880Z", "updated_at" => "2026-09-06T08:22:04.880Z"}]}]} (via streamed from dexie:public:message_channel)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+Finished "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 15:22:04 +0700
+DexieChannel stopped streaming from dexie:public:message_channel
+Finished "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 15:22:04 +0700
+DexieChannel stopped streaming from dexie:public:message_channel
+Finished "/cable" [WebSocket] for 127.0.0.1 at 2026-09-06 15:22:04 +0700
+DexieChannel stopped streaming from dexie:public:message_channel
