@@ -1,9 +1,9 @@
 # DexieCable
 
 > [!NOTE]
-> DexieCable is NOT meant to be a local-first solution. It has no automatic capability to sync updates back to the server. For now, think of it as an alternative to Turbo Streams built with component frameworks (Vue, React, Svelte, etc) in mind.
+> By itself, DexieCable is NOT a local-first solution. It has no automatic capability to push client-side changes back to the server.
 >
-> Full synchronization utilizing event streams will arrive in DexieCable 3.0.
+> An addon providing full synchronization based on event streams is currently in development. But for now, if you need full synchronization, you'll have to roll your own.
 
 DexieCable gives your ActionCable channel a query DSL that mirrors the Dexie.js API, letting you push database mutations from the server to the client in real time. It also gives you a [`syncs_to_dexie`](#syncs_to_dexie-automatic-model-streaming) ActiveRecord macro for automatic change syncing.
 
