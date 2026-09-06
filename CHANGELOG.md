@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.0.1 - 2026-09-06
+
+### Changed
+
+- Removed `subscription.addPublicStream()`/`removePublicStream()`; `addStream()` now accepts either a signed token or a plain string, falling back to a public stream when the token doesn't resolve.
+
 ## 2.0.0 - 2026-09-06
 
 ### Changed
@@ -16,8 +22,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Private streams: `DexieChannel.stream_token_for(target)` issues Rails signed IDs (configurable expiry, never expires by default); clients subscribe with `subscription.addStream(token)`.
-- Public streams: string `via:` targets (e.g. `syncs_to_dexie via: "feed"`) are public and namespaced under `public:`; clients subscribe with `subscription.addPublicStream(name)`.
-- `subscription.addStream()` and `subscription.addPublicStream()` return a function that removes the stream; `removeAllStreams()` stops every current stream.
+- Public streams: string `via:` targets (e.g. `syncs_to_dexie via: "feed"`) are public and namespaced under `public:`; clients subscribe with `subscription.addStream("feed")` — a plain string falls back to a public stream.
+- `subscription.addStream()` returns a function that removes the stream; `removeAllStreams()` stops every current stream.
 
 ### Removed
 

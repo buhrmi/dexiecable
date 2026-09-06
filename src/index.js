@@ -37,14 +37,12 @@ export function setConsumer(c) {
  * Subscribe to the DexieChannel.
  *
  * Streams are added and removed dynamically after the subscription is
- * established. Private streams use a signed token (the value returned by
- * `DexieChannel.stream_token_for(target)` on the server) with `addStream()`
- * and `removeStream()`; `addStream()` also accepts extra params that are
+ * established. `addStream()` accepts a signed token (the value returned by
+ * `DexieChannel.stream_token_for(target)` on the server) or a plain string,
+ * which becomes a public stream. It also accepts extra params that are
  * forwarded to the server's `subscribed_to` hook, and returns a function
- * that removes the stream. Public streams use `addPublicStream()` and
- * `removePublicStream()` with a plain name; `addPublicStream()` also returns
- * a function that removes the stream. `removeAllStreams()` stops every
- * current stream (e.g. on logout).
+ * that removes the stream. `removeAllStreams()` stops every current stream
+ * (e.g. on logout).
  *
  * @param {import("dexie").Dexie} db - Your Dexie database instance.
  * @param {string|object} [channelOrMixin="DexieChannel"] - Channel class
@@ -53,8 +51,6 @@ export function setConsumer(c) {
  * @returns {import("@rails/actioncable").Subscription & {
  *   addStream: (stream: string, params?: Record<string, any>) => () => void,
  *   removeStream: (stream: string) => void,
- *   addPublicStream: (name: string) => () => void,
- *   removePublicStream: (name: string) => void,
  *   removeAllStreams: () => void
  * }}
  *
@@ -64,6 +60,7 @@ export function setConsumer(c) {
  *
  *   const subscription = subscribe(db); // subscribes to "DexieChannel"
  *   const removeStream = subscription.addStream(streamToken, { last_seq_id: 100 });
+ *   const removeFeed = subscription.addStream("feed"); // plain strings are public
  *   removeStream(); // stop listening
  */
 export function subscribe(db, channelOrMixin, mixin) {
@@ -114,11 +111,6 @@ export function subscribe(db, channelOrMixin, mixin) {
     return () => performStream("remove_stream", { stream });
   };
   subscription.removeStream = (stream) => performStream("remove_stream", { stream });
-  subscription.addPublicStream = (name) => {
-    performStream("add_public_stream", { stream: name });
-    return () => performStream("remove_public_stream", { stream: name });
-  };
-  subscription.removePublicStream = (name) => performStream("remove_public_stream", { stream: name });
   subscription.removeAllStreams = () => performStream("remove_all_streams", {});
 
   return subscription;

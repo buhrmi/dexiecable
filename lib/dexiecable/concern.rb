@@ -20,7 +20,7 @@ module DexieCable
   #
   #   subscribe(db)                 # subscribes to "DexieChannel"
   #   subscription.addStream(DexieChannel.stream_token_for(current_user))
-  #   subscription.addPublicStream("feed")
+  #   subscription.addStream("feed") # plain strings are public streams
   #
   extend ActiveSupport::Concern
 
@@ -73,36 +73,33 @@ module DexieCable
 
   def add_stream(data)
     record = resolve_subscribe_target(data["stream"])
-    return unless record
-
-    stream_for record
     params = data.except("action", "stream").with_indifferent_access
-    subscribed_to(record, params)
+
+    if record
+      stream_for record
+      subscribed_to(record, params)
+    else
+      name = data["stream"].to_s
+      return if name.blank?
+
+      stream_from public_stream_name(name)
+      subscribed_to(name, params)
+    end
   end
 
   def remove_stream(data)
     record = resolve_subscribe_target(data["stream"])
-    return unless record
 
-    stop_stream_from self.class.broadcasting_for(record)
+    if record
+      stop_stream_from self.class.broadcasting_for(record)
+    else
+      name = data["stream"].to_s
+      stop_stream_from public_stream_name(name) if name.present?
+    end
   end
 
   def remove_all_streams(_data)
     stop_all_streams
-  end
-
-  def add_public_stream(data)
-    name = data["stream"].to_s
-    return if name.blank?
-
-    stream_from public_stream_name(name)
-    params = data.except("action", "stream").with_indifferent_access
-    subscribed_to(name, params)
-  end
-
-  def remove_public_stream(data)
-    name = data["stream"].to_s
-    stop_stream_from public_stream_name(name) if name.present?
   end
 
   # Override to push initial data when a stream is added. +record+ is the

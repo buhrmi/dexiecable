@@ -5,7 +5,7 @@
 >
 > Full synchronization utilizing event streams will arrive in DexieCable 3.0.
 
-DexieCable gives your ActionCable channel a query DSL that mirrors the Dexie.js API, letting you push database mutations from the server to the client in real time. It also gives you a [`syncs_to_dexie`](#syncs_to_dexie--automatic-model-syncing) ActiveRecord macro for automatic change syncing.
+DexieCable gives your ActionCable channel a query DSL that mirrors the Dexie.js API, letting you push database mutations from the server to the client in real time. It also gives you a [`syncs_to_dexie`](#syncs_to_dexie-automatic-model-streaming) ActiveRecord macro for automatic change syncing.
 
 Push Dexie table updates to a client from anywhere on the server:
 
@@ -18,7 +18,7 @@ class NotificationsController < ApplicationController
 end
 ```
 
-Or sync model changes automatically with the `syncs_to_dexie` macro (more info [below](#syncs_to_dexie--automatic-model-syncing))
+Or sync model changes automatically with the `syncs_to_dexie` macro (more info [below](#syncs_to_dexie-automatic-model-streaming))
 
 ```ruby
 class Notification < ApplicationRecord
@@ -114,7 +114,7 @@ const stopStreaming = subscription.addStream(userStream);
 stopStreaming(); // equivalent to subscription.removeStream(userStream)
 ```
 
-`addStream`/`removeStream` perform `add_stream`/`remove_stream` on `DexieChannel`, which verifies the token and then `stream_from`/`stop_stream_from` the decoded identifier. `removeAllStreams()` performs `remove_all_streams`, stopping every current stream — handy on logout:
+`addStream`/`removeStream` perform `add_stream`/`remove_stream` on `DexieChannel`, which verifies the token and then `stream_from`/`stop_stream_from` the decoded identifier. `removeAllStreams()` performs `remove_all_streams`, stopping every current stream. Handy on logout:
 
 ```js
 subscription.removeAllStreams();
@@ -161,11 +161,11 @@ Pass params from the client when adding a stream:
 subscription.addStream(userStream, { last_seq_id: 100 });
 ```
 
-`subscribed_to` runs after the stream is opened, and `table(...)` transmits to just this subscriber — so the snapshot arrives before any live mutation. Custom actions are triggered like any ActionCable action: `subscription.perform("mark_as_read", { id: 42 })`.
+`subscribed_to` runs after the stream is opened, and `table(...)` transmits to just this subscriber, so the snapshot arrives before any live mutation. Custom actions are triggered like any ActionCable action: `subscription.perform("mark_as_read", { id: 42 })`.
 
 #### Public streams
 
-For data that's public (a global feed, announcements, etc.), skip the signature. Use a string target — it's namespaced under `public:` automatically:
+For data that's public (a global feed, announcements, etc.), skip the signature. Use a string target. It's namespaced under `public:` automatically:
 
 ```ruby
 DexieChannel["feed"].table("announcements").add(announcement)
@@ -176,11 +176,11 @@ class Announcement < ApplicationRecord
 end
 ```
 
-Then subscribe by name — no token required:
+Then subscribe by name. No token required:
 
 ```js
-const stopPublicStream = subscription.addPublicStream("feed");
-stopPublicStream(); // equivalent to subscription.removePublicStream("feed")
+const stopPublicStream = subscription.addStream("feed");
+stopPublicStream(); // equivalent to subscription.removeStream("feed")
 ```
 
 Public streams are namespaced under `public:`, so this path can never reach a signed (private) stream.
@@ -222,7 +222,7 @@ DexieChannel[current_user]
 
 The full query chain is serialized as JSON and sent over ActionCable. The JS client replays every method call against the local Dexie database in order.
 
-### `syncs_to_dexie` — automatic model streaming
+### `syncs_to_dexie`: automatic model streaming
 
 Add to any ActiveRecord model. Optionally provide the broadcast target.
 
@@ -231,7 +231,7 @@ class Message < ApplicationRecord
   # Calls send(:receiver), then broadcasts: DexieChannel.broadcast_to(receiver, ...)
   syncs_to_dexie via: :receiver
 
-  # String = public stream (subscribe via addPublicStream("public"))
+  # String = public stream (subscribe via addStream("public"))
   syncs_to_dexie via: "public"
 
   # Procs are also supported. If an array is returned, multiple broadcasts are made
@@ -263,8 +263,8 @@ Internally, `syncs_to_dexie` sets up the following ActiveRecord callbacks:
 | `table:` | model's `table_name` | Override the Dexie table name. A Proc is evaluated in the record's context. |
 | `only:` | `[:create, :update, :destroy]` | Limit which events trigger a sync |
 | `with:` | `:as_json_for_dexie` | Method name (Symbol) or Proc for serializing records |
-| `if:` | *(none)* | Symbol (method name) or Proc — only sync when it returns truthy |
-| `unless:` | *(none)* | Symbol (method name) or Proc — skip sync when it returns truthy |
+| `if:` | *(none)* | Symbol (method name) or Proc. Only sync when it returns truthy |
+| `unless:` | *(none)* | Symbol (method name) or Proc. Skip sync when it returns truthy |
 
 You can combine multiple `syncs_to_dexie` declarations, each with different conditions:
 

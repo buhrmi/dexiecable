@@ -52,11 +52,6 @@ function subscribe(db, channelOrMixin, mixin) {
     return () => performStream("remove_stream", { stream });
   };
   subscription.removeStream = (stream) => performStream("remove_stream", { stream });
-  subscription.addPublicStream = (name) => {
-    performStream("add_public_stream", { stream: name });
-    return () => performStream("remove_public_stream", { stream: name });
-  };
-  subscription.removePublicStream = (name) => performStream("remove_public_stream", { stream: name });
   subscription.removeAllStreams = () => performStream("remove_all_streams", {});
   return subscription;
 }
