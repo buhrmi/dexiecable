@@ -8,5 +8,5 @@ ENTRY="app/assets/builds/dexiecable/index.js"
 OUTPUT="app/assets/builds/dexiecable-bundle.js"
 
 echo "Building dexiecable bundle with esbuild..."
-npx esbuild "$ENTRY" --bundle --format=esm --outfile="$OUTPUT"
+npx esbuild "$ENTRY" --bundle --format=esm --external:@rails/actioncable --outfile="$OUTPUT"
 echo "Done: $OUTPUT ($(wc -c < "$OUTPUT") bytes)"

@@ -25,8 +25,9 @@
   window.Dexie = Dexie;
   window.dexieDB = db;
 
-  // Subscribe to DexieCable
-  subscribe(db, { channel: "MessageChannel" });
+  // Subscribe to DexieCable and start streaming the public message channel
+  const subscription = subscribe(db);
+  subscription.addPublicStream("<%= j(@dexie_stream) %>");
 
   // Display messages from IndexedDB via liveQuery
   const messagesDiv = document.getElementById("messages");

@@ -3,40 +3,26 @@
 > [!NOTE]
 > DexieCable is NOT meant to be a local-first solution. It has no automatic capability to sync updates back to the server. For now, think of it as an alternative to Turbo Streams built with component frameworks (Vue, React, Svelte, etc) in mind.
 >
-> Full synchronization utilizing event streams will arrive in DexieCable 2.0.
+> Full synchronization utilizing event streams will arrive in DexieCable 3.0.
 
-DexieCable augments ActionCable channels with a query DSL that mirrors the Dexie.js API, letting you push database mutations from the server to the client in real time. It also gives you a [`streams_via`](#streams_via--automatic-model-syncing) ActiveRecord macro for automatic change syncing.
+DexieCable ships a single `DexieChannel` with a query DSL that mirrors the Dexie.js API, letting you push database mutations from the server to the client in real time. It also gives you a [`syncs_to_dexie`](#syncs_to_dexie--automatic-model-syncing) ActiveRecord macro for automatic change syncing.
 
-You can run any Dexie table update directly inside a channel:
-
-```ruby
-class UserChannel < ApplicationCable::Channel
-  include DexieCable
-
-  def subscribed
-    stream_for current_user
-    recent_notifications = current_user.notifications.last(10)
-    table("notifications").bulkAdd(recent_notifications)
-  end
-end
-```
-
-Or from inside a controller:
+Push Dexie table updates to a client from anywhere on the server:
 
 ```ruby
 class NotificationsController < ApplicationController
   def create
     notification = current_user.notifications.create!(notification_params)
-    UserChannel[current_user].table("notifications").add(notification)
+    DexieChannel[current_user].table("notifications").add(notification)
   end
 end
 ```
 
-An even more convenient way is to use the `streams_via` macro (more info [below](#streams_via--automatic-model-syncing))
+Or sync model changes automatically with the `syncs_to_dexie` macro (more info [below](#syncs_to_dexie--automatic-model-syncing))
 
 ```ruby
 class Notification < ApplicationRecord
-  streams_via UserChannel, to: :user
+  syncs_to_dexie via: :user
 end
 ```
 
@@ -50,7 +36,7 @@ Add to your `Gemfile`:
 gem "dexiecable"
 ```
 
-Then `bundle install`. The Railtie automatically extends `ActiveRecord::Base` with `streams_via`.
+Then `bundle install`. The Railtie automatically extends `ActiveRecord::Base` with `syncs_to_dexie`.
 
 ### npm package
 
@@ -66,7 +52,9 @@ Pass your Dexie database as the first argument to `subscribe()`:
 import { subscribe } from "dexiecable";
 import { db } from "./db";
 
-subscribe(db, "UserChannel");
+const subscription = subscribe(db);
+// Stream tokens come from the server: DexieChannel.stream_token_for(target)
+subscription.addStream(streamToken);
 ```
 
 A consumer is lazily created on the first `subscribe()` call. If you need to access or set the consumer explicitly, use `getConsumer()` and `setConsumer()`:
@@ -83,24 +71,69 @@ setConsumer(createConsumer("wss://example.com/cable"));
 
 ## Usage
 
-### `include DexieCable` in a channel
+### DexieChannel
+
+DexieCable ships one channel — `DexieChannel` — so you never define your own channels or include anything. Every Dexie broadcast goes through it.
+
+Stream tokens are signed with the application secret, so a client can only subscribe to streams the server has issued for it:
 
 ```ruby
-class UserChannel < ApplicationCable::Channel
-  include DexieCable
+DexieChannel.stream_token_for(target)
+```
 
-  def subscribed
-    stream_for current_user
-  end
+For an ActiveRecord model it signs the record's GlobalID:
+
+```ruby
+DexieChannel.stream_token_for(current_user)
+# => "eyJkYXRhIjoiZGV4aWVfY2FibGU6ZGV4aWVfY2hhbm5lbDpnaWQ6Ly9hcHAvVXNlci8xIn0=--signature"
+```
+
+Send that token to the client (render it in a view, return it from an endpoint, etc.) and add it to the subscription:
+
+```js
+const subscription = subscribe(db);
+subscription.addStream(userStream);
+```
+
+The client now receives every mutation broadcast to `current_user`. To stop listening:
+
+```js
+subscription.removeStream(userStream);
+```
+
+`addStream`/`removeStream` perform `add_stream`/`remove_stream` on `DexieChannel`, which verifies the token and then `stream_from`/`stop_stream_from` the decoded identifier. `removeAllStreams()` performs `remove_all_streams`, stopping every current stream — handy on logout:
+
+```js
+subscription.removeAllStreams();
+```
+
+#### Public streams
+
+For data that's public (a global feed, announcements, etc.), skip the signature. Use a string target — it's namespaced under `public:` automatically:
+
+```ruby
+DexieChannel["feed"].table("announcements").add(announcement)
+
+# or, on a model:
+class Announcement < ApplicationRecord
+  syncs_to_dexie via: "feed"
 end
 ```
 
-This gives you:
+Then subscribe by name — no token required:
 
-| Method | Description |
-|---|---|
-| `self.[](to)` | Returns a `ScopedChannel` bound to a recipient. `UserChannel[current_user]` |
-| `table(name)` | Starts a query chain. `table("messages")` |
+```js
+subscription.addPublicStream("feed");
+subscription.removePublicStream("feed");
+```
+
+Public streams are namespaced under `public:`, so this path can never reach a signed (private) stream.
+
+`DexieChannel[target]` returns a scoped channel for broadcasting to one recipient:
+
+```ruby
+DexieChannel[current_user].table("notifications").add(notification)
+```
 
 ### Chaining Dexie operations
 
@@ -108,24 +141,24 @@ Any Dexie.js write operation triggers an immediate broadcast:
 
 ```ruby
 # Single insert
-UserChannel[current_user].table("messages").add(id: 1, text: "hello")
+DexieChannel[current_user].table("messages").add(id: 1, text: "hello")
 
 # Bulk insert
-UserChannel[current_user].table("messages").bulkAdd(messages)
+DexieChannel[current_user].table("messages").bulkAdd(messages)
 
 # Update (using modify)
-UserChannel[current_user]
+DexieChannel[current_user]
   .table("messages")
   .where(:id).equals(msg.id)
   .modify(read: true)
 
 # Update (using update)
-UserChannel[current_user]
+DexieChannel[current_user]
   .table("messages")
   .update(msg.id, text: "updated text")
 
 # Delete
-UserChannel[current_user]
+DexieChannel[current_user]
   .table("messages")
   .where(:room_id).equals(room.id)
   .delete()
@@ -133,25 +166,32 @@ UserChannel[current_user]
 
 The full query chain is serialized as JSON and sent over ActionCable. The JS client replays every method call against the local Dexie database in order.
 
-### `streams_via` — automatic model streaming
+### `syncs_to_dexie` — automatic model streaming
 
-Add to any ActiveRecord model. Just provide the channel class and, optionally, the broadcast target.
+Add to any ActiveRecord model. Optionally provide the broadcast target.
 
 ```ruby
 class Message < ApplicationRecord
-  # Calls send(:receiver), then broadcasts: UserChannel.broadcast_to(receiver, ...)
-  streams_via UserChannel, to: :receiver
+  # Calls send(:receiver), then broadcasts: DexieChannel.broadcast_to(receiver, ...)
+  syncs_to_dexie via: :receiver
 
-  # String used directly: RoomChannel.broadcast_to("public", ...)
-  streams_via RoomChannel, to: "public"
+  # String = public stream (subscribe via addPublicStream("public"))
+  syncs_to_dexie via: "public"
 
   # Procs are also supported. If an array is returned, multiple broadcasts are made
-  # conversation.users.each { |u| UserChannel.broadcast_to(u, ...) }
-  streams_via UserChannel, to: -> { conversation.users }
+  # conversation.users.each { |u| DexieChannel.broadcast_to(u, ...) }
+  syncs_to_dexie via: -> { conversation.users }
 end
 ```
 
-Internally, `streams_via` sets up the following ActiveRecord callbacks:
+Broadcasts go out over `DexieChannel`, the channel DexieCable provides. On the client, subscribe to it and add the stream token returned by `DexieChannel.stream_token_for(target)`:
+
+```js
+const subscription = subscribe(db);
+subscription.addStream(streamIdentifier);
+```
+
+Internally, `syncs_to_dexie` sets up the following ActiveRecord callbacks:
 
 | Event | Action |
 |---|---|
@@ -163,23 +203,21 @@ Internally, `streams_via` sets up the following ActiveRecord callbacks:
 
 | Option | Default | Description |
 |---|---|---|
-| *(first argument)* | *(required)* | A DexieCable channel class |
-| `to:` | the record itself | The stream target passed to `broadcast_to`. Symbol → calls `send`. String → used as-is. Proc → evaluated in record context. Returns a single recipient or collection. |
+| `via:` | the record itself | The stream target. Symbol → calls `send` (a record, signed). String → public stream name. Proc → evaluated in record context. Returns a single recipient or collection. |
 | `table:` | model's `table_name` | Override the Dexie table name. A Proc is evaluated in the record's context. |
 | `only:` | `[:create, :update, :destroy]` | Limit which events trigger a sync |
 | `with:` | `:as_json_for_dexie` | Method name (Symbol) or Proc for serializing records |
 | `if:` | *(none)* | Symbol (method name) or Proc — only sync when it returns truthy |
 | `unless:` | *(none)* | Symbol (method name) or Proc — skip sync when it returns truthy |
 
-You can combine multiple `streams_via` declarations, each with different conditions:
+You can combine multiple `syncs_to_dexie` declarations, each with different conditions:
 
 ```ruby
 class Message < ApplicationRecord
-  streams_via UserChannel, to: -> { sender },
-              if: :published?
+  syncs_to_dexie via: -> { sender },
+                 if: :published?
 
-  streams_via AdminChannel,
-              unless: -> { draft? }
+  syncs_to_dexie unless: -> { draft? }
 end
 ```
 
@@ -190,23 +228,22 @@ Override `as_json_for_dexie` in your model, or use the `with` option to specify 
 ```ruby
 class Message < ApplicationRecord
   # Using the default as_json_for_dexie override:
-  streams_via UserChannel, to: :sender
+  syncs_to_dexie via: :sender
 
   def as_json_for_dexie
     super.merge(room_name: room.name)
   end
 
   # Or use a custom serializer method:
-  streams_via AdminChannel, to: :admin,
-             with: :admin_payload
+  syncs_to_dexie via: :admin,
+                 with: :admin_payload
 
   def admin_payload
     attributes.slice("id", "body", "flagged")
   end
 
   # Or a Proc:
-  streams_via PublicChannel,
-             with: -> { { id: id, summary: body.truncate(100) } }
+  syncs_to_dexie with: -> { { id: id, summary: body.truncate(100) } }
 end
 ```
 
@@ -245,60 +282,6 @@ The JS side replays it as:
 
 ```js
 dexie.messages.where("room_id").equals(5).add({ id: 1, text: "hello" })
-```
-
-## Recipies
-
-### Use sequence IDs to avoid data loss
-
-A common pattern to avoid data loss during transient disconnections is using sequence IDs to bridge the offline gap and detect gaps in transmitted records. When a connection drops, updates continue on the server. Sending the client’s latest known sequence ID upon reconnect allows the backend to query and stream only the records missed while offline.
-
-To enable this, DexieCable ships its own version of the ActionCable client with one key
-extension: **channel params can be functions**. When a param value is a
-function, it is called and awaited at subscribe time — use this to submit the latest known sequence ID on connection:
-
-```js
-import { subscribe } from "dexiecable";
-import { db, getLastSeqId } from './database';
-
-const roomId = 123;
-
-subscribe(db, {
-  channel: "RoomChannel",
-  room_id: roomId,
-  seq_id: () => getLastSeqId(roomId) // evaluated fresh on each reconnect
-});
-```
-
-Send missed messages on reconnection:
-
-```ruby
-class RoomChannel < ApplicationChannel:Base
-  def subscribed
-    stream_from "room:#{params[:room_id]}"
-    missed_messages = room.messages.where("seq_id > ?", params[:seq_id])
-    table("messages").bulkAdd(missed_messages)
-  end
-end
-```
-
-To add Sequence IDs, you might want to have look at the [Sequenced](https://github.com/derrickreimer/sequenced). Another option is to use [AnyCable](https://docs.anycable.io/rails/getting_started) since it guarantees deliveries of ActionCable messages.
-
-### Multi-user environments
-
-In multi-user or multi-tenant applications, you can isolate records by binding different subscription channels to separate Dexie database instances. This prevents local data leaks between user accounts and keeps private user data separate from public or shared feeds.
-
-```js
-
-import Dexie from 'dexie'
-import { subscribe } from 'dexiecable'
-
-const userDB = new Dexie("user_"+userId)
-const sharedDB = new Dexie("shared")
-
-subscribe(userDB, 'UserChannel')
-subscribe(sharedDB, 'PublicChannel')
-
 ```
 
 ## License
