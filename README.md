@@ -26,6 +26,40 @@ class Notification < ApplicationRecord
 end
 ```
 
+## What's new in 2.0
+
+DexieCable 2.0 is a mixin. Create your own `DexieChannel` and `include DexieCable`:
+
+```ruby
+class DexieChannel < ApplicationCable::Channel
+  include DexieCable
+end
+```
+
+On the client, subscribe to that channel and add streams as needed. `addStream` accepts a signed token or a plain string, and returns a function that removes the stream:
+
+```js
+const subscription = subscribe(db);
+const unsubscribe = subscription.addStream(userStreamToken);
+```
+
+You can then use the new `subscribed_to` hook to push initial data before any live mutation arrives. The first argument is the record the token was issued for, or the plain stream name for a public stream:
+
+```ruby
+class DexieChannel < ApplicationCable::Channel
+  include DexieCable
+
+  def subscribed_to(record, params)
+    case record
+    when "feed"
+      table(record).bulkAdd(Announcement.for_stream(record).map(&:as_json_for_dexie))
+    when User
+      table("notifications").bulkAdd(record.notifications.map(&:as_json_for_dexie))
+    end
+  end
+end
+```
+
 ## Installation
 
 ### Ruby gem
