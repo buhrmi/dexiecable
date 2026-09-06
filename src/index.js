@@ -40,18 +40,20 @@ export function setConsumer(c) {
  * established. Private streams use a signed token (the value returned by
  * `DexieChannel.stream_token_for(target)` on the server) with `addStream()`
  * and `removeStream()`; `addStream()` also accepts extra params that are
- * forwarded to the server's `subscribed_to` hook. Public streams use
- * `addPublicStream()` and `removePublicStream()` with a plain name.
- * `removeAllStreams()` stops every current stream (e.g. on logout).
+ * forwarded to the server's `subscribed_to` hook, and returns a function
+ * that removes the stream. Public streams use `addPublicStream()` and
+ * `removePublicStream()` with a plain name; `addPublicStream()` also returns
+ * a function that removes the stream. `removeAllStreams()` stops every
+ * current stream (e.g. on logout).
  *
  * @param {import("dexie").Dexie} db - Your Dexie database instance.
  * @param {string|object} [channelOrMixin="DexieChannel"] - Channel class
  *   name, or an ActionCable lifecycle mixin.
  * @param {object} [mixin={}] - ActionCable lifecycle callbacks.
  * @returns {import("@rails/actioncable").Subscription & {
- *   addStream: (stream: string, params?: Record<string, any>) => void,
+ *   addStream: (stream: string, params?: Record<string, any>) => () => void,
  *   removeStream: (stream: string) => void,
- *   addPublicStream: (name: string) => void,
+ *   addPublicStream: (name: string) => () => void,
  *   removePublicStream: (name: string) => void,
  *   removeAllStreams: () => void
  * }}
@@ -61,7 +63,8 @@ export function setConsumer(c) {
  *   import { db } from "./db";
  *
  *   const subscription = subscribe(db); // subscribes to "DexieChannel"
- *   subscription.addStream(streamToken, { last_seq_id: 100 });
+ *   const removeStream = subscription.addStream(streamToken, { last_seq_id: 100 });
+ *   removeStream(); // stop listening
  */
 export function subscribe(db, channelOrMixin, mixin) {
   if (!db) {
@@ -106,9 +109,15 @@ export function subscribe(db, channelOrMixin, mixin) {
     }
   };
 
-  subscription.addStream = (stream, params = {}) => performStream("add_stream", { ...params, stream });
+  subscription.addStream = (stream, params = {}) => {
+    performStream("add_stream", { ...params, stream });
+    return () => performStream("remove_stream", { stream });
+  };
   subscription.removeStream = (stream) => performStream("remove_stream", { stream });
-  subscription.addPublicStream = (name) => performStream("add_public_stream", { stream: name });
+  subscription.addPublicStream = (name) => {
+    performStream("add_public_stream", { stream: name });
+    return () => performStream("remove_public_stream", { stream: name });
+  };
   subscription.removePublicStream = (name) => performStream("remove_public_stream", { stream: name });
   subscription.removeAllStreams = () => performStream("remove_all_streams", {});
 

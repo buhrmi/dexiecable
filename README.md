@@ -105,13 +105,13 @@ Send that token to the client (render it in a view, return it from an endpoint, 
 
 ```js
 const subscription = subscribe(db);
-subscription.addStream(userStream);
+const stopStreaming = subscription.addStream(userStream);
 ```
 
-The client now receives every mutation broadcast to `current_user`. To stop listening:
+`addStream` returns a function that removes the stream, so you can clean up later:
 
 ```js
-subscription.removeStream(userStream);
+stopStreaming(); // equivalent to subscription.removeStream(userStream)
 ```
 
 `addStream`/`removeStream` perform `add_stream`/`remove_stream` on `DexieChannel`, which verifies the token and then `stream_from`/`stop_stream_from` the decoded identifier. `removeAllStreams()` performs `remove_all_streams`, stopping every current stream — handy on logout:
@@ -179,8 +179,8 @@ end
 Then subscribe by name — no token required:
 
 ```js
-subscription.addPublicStream("feed");
-subscription.removePublicStream("feed");
+const stopPublicStream = subscription.addPublicStream("feed");
+stopPublicStream(); // equivalent to subscription.removePublicStream("feed")
 ```
 
 Public streams are namespaced under `public:`, so this path can never reach a signed (private) stream.
