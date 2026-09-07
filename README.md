@@ -5,7 +5,13 @@
 >
 > An addon providing full synchronization based on event streams is currently in development. But for now, if you need full synchronization, you'll have to roll your own.
 
-DexieCable gives your ActionCable channel a query DSL that mirrors the Dexie.js API, letting you push database mutations from the server to the client in real time. It also gives you a [`syncs_to_dexie`](#syncs_to_dexie-automatic-model-streaming) ActiveRecord macro for automatic change syncing.
+## Who's this for?
+
+DexieCable is made for Ruby on Rails apps that manage their client-side state in Dexie and use Dexie live queries fir reactive UI updates. It provides an alternative to Turbo Streams for people who prefer component frameworks (React, Vue, Svelte, etc.) over of Turbo. 
+
+## How does it work?
+
+DexieCable gives your ActionCable channel a query DSL that mirrors the [Dexie.js API](https://dexie.org/docs), letting you push database mutations from the server to the client in real time. It also gives you a [`syncs_to_dexie`](#syncs_to_dexie-automatic-model-streaming) ActiveRecord macro for automatic change syncing.
 
 Push Dexie table updates to a client from anywhere on the server:
 
@@ -28,6 +34,8 @@ end
 
 ## What's new in 2.0
 
+### Custom Channels
+
 DexieCable 2.0 is a mixin. Create your own `DexieChannel` and `include DexieCable`:
 
 ```ruby
@@ -36,6 +44,8 @@ class DexieChannel < ApplicationCable::Channel
 end
 ```
 
+### Reuse the same subscription for multiple streams
+
 On the client, subscribe to that channel and add streams as needed. `addStream` accepts a signed token or a plain string, and returns a function that removes the stream:
 
 ```js
@@ -43,7 +53,9 @@ const subscription = subscribe(db);
 const unsubscribe = subscription.addStream(userStreamToken);
 ```
 
-You can then use the new `subscribed_to` hook to push initial data before any live mutation arrives. The first argument is the record the token was issued for, or the plain stream name for a public stream:
+### Subscription hook
+
+A new `subscribed_to` hook to push initial data before any live mutation arrives. The first argument is the record the token was issued for, or the plain stream name for a public stream:
 
 ```ruby
 class DexieChannel < ApplicationCable::Channel
