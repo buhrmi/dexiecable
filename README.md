@@ -7,7 +7,7 @@
 
 ## Who's this for?
 
-DexieCable is made for Ruby on Rails apps that manage their client-side state in [Dexie](httos://dexie.org) and use Dexie live queries for reactive UI updates. It provides an alternative to Turbo Streams for people who prefer component frameworks (React, Vue, Svelte, etc.) over of Turbo. 
+DexieCable is made for Ruby on Rails apps that manage their client-side state in [Dexie](https://dexie.org) and use Dexie live queries for reactive UI updates. It provides an alternative to Turbo Streams for people who prefer component frameworks (React, Vue, Svelte, etc.) over of Turbo. 
 
 ## How does it work?
 
