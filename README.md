@@ -274,6 +274,9 @@ Add to any ActiveRecord model. Optionally provide the broadcast target.
 
 ```ruby
 class Message < ApplicationRecord
+  belongs_to :conversation
+  belongs_to :receiver
+  
   # Calls send(:receiver), then broadcasts: DexieChannel.broadcast_to(receiver, ...)
   syncs_to_dexie via: :receiver
 

@@ -1,5 +1,14 @@
 require "test_helper"
 
+# Test model: `via:` is a Symbol that returns an array of recipients.
+class ArrayViaMessage < ApplicationRecord
+  self.table_name = "messages"
+
+  syncs_to_dexie via: :recipients, only: [:create]
+
+  attr_accessor :recipients
+end
+
 class RecordingDexieChannel < DexieChannel
   attr_reader :received_target, :received_params
 
@@ -40,5 +49,24 @@ class DexieChannelTest < ActionCable::Channel::TestCase
 
     assert_equal "feed", subscription.received_target
     assert_equal 200, subscription.received_params["last_seq_id"]
+  end
+
+  test "syncs_to_dexie via: :recipients broadcasts to each recipient's stream" do
+    recipient_a = Message.create!(body: "recipient a")
+    recipient_b = Message.create!(body: "recipient b")
+
+    record = ArrayViaMessage.new(body: "hello", recipients: [recipient_a, recipient_b])
+
+    stream_a = DexieChannel.broadcasting_for(recipient_a)
+    stream_b = DexieChannel.broadcasting_for(recipient_b)
+
+    record.save!
+
+    assert_broadcasts(stream_a, 1)
+    assert_broadcasts(stream_b, 1)
+
+    payload = ActiveSupport::JSON.decode(broadcasts(stream_a).first)
+    assert_equal "messages", payload["table"]
+    assert_equal "add", payload["ops"].first["method"]
   end
 end
