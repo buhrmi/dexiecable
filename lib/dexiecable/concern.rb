@@ -72,29 +72,35 @@ module DexieCable
   end
 
   def add_stream(data)
-    record = resolve_subscribe_target(data["stream"])
+    token = data["stream"].to_s
     params = data.except("action", "stream").with_indifferent_access
 
-    if record
+    if signed_token?(token)
+      # A token that no longer resolves (expired, revoked, deleted record) is
+      # rejected instead of being treated as a public stream name.
+      record = resolve_subscribe_target(token)
+      return unless record
+
       stream_for record
       subscribed_to(record, params)
     else
-      name = data["stream"].to_s
-      return if name.blank?
+      return if token.blank?
 
-      stream_from public_stream_name(name)
-      subscribed_to(name, params)
+      stream_from public_stream_name(token)
+      subscribed_to(token, params)
     end
   end
 
   def remove_stream(data)
-    record = resolve_subscribe_target(data["stream"])
+    token = data["stream"].to_s
 
-    if record
+    if signed_token?(token)
+      record = resolve_subscribe_target(token)
+      return unless record
+
       stop_stream_from self.class.broadcasting_for(record)
     else
-      name = data["stream"].to_s
-      stop_stream_from public_stream_name(name) if name.present?
+      stop_stream_from public_stream_name(token) if token.present?
     end
   end
 
@@ -109,6 +115,15 @@ module DexieCable
   end
 
   private
+
+  # Distinguishes a signed stream token from a public stream name. A signed
+  # token keeps a valid signature even after it expires, which is what lets us
+  # reject expired tokens instead of falling back to a public stream.
+  def signed_token?(token)
+    return false if token.blank? || SignedGlobalID.verifier.nil?
+
+    SignedGlobalID.verifier.valid_message?(token)
+  end
 
   def public_stream_name(name)
     self.class.broadcasting_for("#{PUBLIC_STREAM_PREFIX}#{name}")

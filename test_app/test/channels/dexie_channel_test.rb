@@ -33,14 +33,27 @@ class DexieChannelTest < ActionCable::Channel::TestCase
     assert_equal 100, subscription.received_params["last_seq_id"]
   end
 
-  test "stream tokens with an expiry in the past fall back to a public stream" do
+  test "expired stream tokens are rejected instead of falling back to a public stream" do
     message = Message.create!(body: "hello")
     token = RecordingDexieChannel.stream_token_for(message, expires_at: 1.second.ago)
 
     subscribe
     perform :add_stream, stream: token
 
-    assert_equal token, subscription.received_target
+    assert_no_streams
+    assert_nil subscription.received_target
+  end
+
+  test "stream tokens for a deleted record are rejected" do
+    message = Message.create!(body: "hello")
+    token = RecordingDexieChannel.stream_token_for(message)
+    message.destroy
+
+    subscribe
+    perform :add_stream, stream: token
+
+    assert_no_streams
+    assert_nil subscription.received_target
   end
 
   test "subscribed_to receives the stream name for public streams" do

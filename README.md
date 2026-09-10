@@ -147,6 +147,8 @@ Tokens never expire by default. Pass `expires_in:` or `expires_at:` to limit a t
 DexieChannel.stream_token_for(current_user, expires_in: 1.day)
 ```
 
+An expired token, or one whose record no longer exists, is rejected. Only plain strings are treated as public stream names.
+
 Send that token to the client (render it in a view, return it from an endpoint, etc.) and add it to the subscription:
 
 ```js
